@@ -120,55 +120,125 @@
         #hud-q-status.listo  { color:#a0ffcc; }
         @keyframes qPulse { from{opacity:0.7} to{opacity:1} }
 
-        /* ══ INVENTARIO HUD ══ */
+        /* ══ INVENTARIO HUD — NUEVO DISEÑO ══ */
         #inv-hud {
             display:none; position:absolute; top:15px; right:15px;
-            width:300px; max-height:calc(100vh - 200px);
-            background:rgba(0,6,16,0.96); border:1px solid rgba(0,255,255,0.35);
-            border-radius:3px; z-index:20; overflow:hidden;
-            box-shadow:0 0 40px rgba(0,255,255,0.08);
-            animation: fadeIn 0.15s ease;
+            width:340px; max-height:calc(100vh - 30px);
+            background:rgba(0,4,14,0.97); border:1px solid rgba(0,255,255,0.18);
+            border-radius:5px; z-index:20; overflow:hidden;
+            flex-direction:column;
+            box-shadow:0 0 0 1px rgba(0,255,255,0.04),0 0 60px rgba(0,200,255,0.06),0 20px 60px rgba(0,0,0,0.7);
+            animation:invSlideIn 0.18s cubic-bezier(0.22,1,0.36,1);
         }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
-        #inv-header {
+        #inv-hud.open { display:flex; }
+        @keyframes invSlideIn { from{opacity:0;transform:translateX(18px)} to{opacity:1;transform:translateX(0)} }
+        /* Header */
+        #inv-header-bar {
             display:flex; align-items:center; justify-content:space-between;
-            padding:10px 14px; background:rgba(0,255,255,0.05);
-            border-bottom:1px solid rgba(0,255,255,0.15);
+            padding:12px 14px 10px;
+            background:linear-gradient(90deg,rgba(0,255,255,0.06) 0%,transparent 100%);
+            border-bottom:1px solid rgba(0,255,255,0.1); flex-shrink:0; position:relative;
         }
-        #inv-header h2 { font-family:'Orbitron',sans-serif; font-size:10px; letter-spacing:3px; color:#0ff; }
-        #inv-header .ih { font-size:8px; color:rgba(0,255,255,0.35); }
-        #inv-body { padding:12px; overflow-y:auto; max-height:calc(100vh - 280px); }
-        #inv-body::-webkit-scrollbar { width:3px; }
-        #inv-body::-webkit-scrollbar-thumb { background:rgba(0,255,255,0.2); }
-
-        .inv-panel { background:rgba(0,10,22,0.8); border:1px solid rgba(0,255,255,0.1); border-radius:2px; padding:10px; margin-bottom:10px; }
-        .inv-panel-title { font-family:'Orbitron',sans-serif; font-size:7px; letter-spacing:2px; color:rgba(0,255,255,0.45); margin-bottom:8px; }
-        .inv-stat-row { display:flex; justify-content:space-between; font-size:8px; margin-bottom:4px; color:rgba(255,255,255,0.45); }
-        .inv-stat-row span:last-child { color:#fff; }
-
-        .inv-sec-label { font-size:7px; letter-spacing:2px; color:rgba(0,255,255,0.35); margin:10px 0 6px 0; }
-        .inv-slots { display:grid; grid-template-columns:repeat(4,1fr); gap:5px; margin-bottom:8px; }
-        .inv-slot {
-            background:rgba(0,8,18,0.9); border:1px solid rgba(0,255,255,0.08);
-            border-radius:2px; padding:6px 3px; text-align:center; min-height:68px;
-            display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;
-        }
-        .inv-slot.ocu { border-color:rgba(0,255,255,0.2); cursor:pointer; }
-        .inv-slot.ocu:hover { border-color:rgba(0,255,255,0.5); background:rgba(0,20,40,0.9); }
-        .inv-slot.eq  { border-color:rgba(0,255,100,0.4); background:rgba(0,16,8,0.6); }
-        .inv-slot .si { font-size:17px; margin-bottom:3px; }
-        .inv-slot .sn { font-size:6px; color:rgba(0,255,255,0.8); font-family:'Orbitron',sans-serif; line-height:1.2; }
-        .inv-slot .st { font-size:5px; color:rgba(255,255,255,0.25); margin-top:1px; }
-        .inv-slot .smu{ font-size:7px; color:#ffd700; margin-top:2px; }
-        .inv-slot .se { position:absolute; top:2px; right:2px; font-size:5px; color:#0f6; }
-        .inv-slot .sv { font-size:10px; color:rgba(255,255,255,0.07); }
-        .inv-actions { display:none; position:absolute; inset:0; background:rgba(0,6,14,0.96); flex-direction:column; align-items:center; justify-content:center; gap:4px; border-radius:2px; }
-        .inv-slot.ocu:hover .inv-actions { display:flex; }
-        .inv-act-btn { font-size:7px; padding:3px 8px; border:1px solid rgba(0,255,255,0.4); background:transparent; color:#0ff; cursor:pointer; border-radius:1px; font-family:'Share Tech Mono',monospace; }
-        .inv-act-btn:hover { background:rgba(0,255,255,0.15); }
-        .inv-act-btn.deseq { border-color:rgba(255,120,0,0.5); color:#fa0; }
-
-        .inv-ammo-warn { font-size:8px; color:#fa0; padding:7px 10px; background:rgba(20,10,0,0.7); border:1px solid rgba(255,160,0,0.2); border-radius:2px; margin-top:6px; display:none; }
+        #inv-header-bar::after { content:''; position:absolute; bottom:0; left:14px; right:14px; height:1px; background:linear-gradient(90deg,transparent,rgba(0,255,255,0.35),transparent); }
+        .inv-header-left { display:flex; align-items:center; gap:9px; }
+        .inv-header-icon { width:28px; height:28px; background:rgba(0,255,255,0.07); border:1px solid rgba(0,255,255,0.18); border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+        .inv-header-title { font-family:'Orbitron',sans-serif; font-size:9px; font-weight:900; letter-spacing:4px; color:#0ff; }
+        .inv-header-sub { font-size:6px; color:rgba(0,255,255,0.3); letter-spacing:2px; margin-top:2px; }
+        #inv-close-btn { background:transparent; border:1px solid rgba(0,255,255,0.18); color:rgba(0,255,255,0.4); font-family:'Orbitron',sans-serif; font-size:7px; letter-spacing:1px; padding:4px 9px; border-radius:2px; cursor:pointer; transition:all .15s; }
+        #inv-close-btn:hover { border-color:rgba(0,255,255,0.5); color:#0ff; background:rgba(0,255,255,0.07); }
+        /* Tabs internos */
+        #inv-tabs { display:flex; border-bottom:1px solid rgba(0,255,255,0.07); flex-shrink:0; background:rgba(0,0,0,0.25); }
+        .inv-tab { flex:1; padding:8px 4px 7px; background:transparent; border:none; color:rgba(0,255,255,0.25); font-family:'Orbitron',sans-serif; font-size:5.5px; letter-spacing:1.5px; cursor:pointer; text-transform:uppercase; transition:all .15s; border-bottom:2px solid transparent; margin-bottom:-1px; display:flex; flex-direction:column; align-items:center; gap:3px; }
+        .inv-tab:hover { color:rgba(0,255,255,0.65); }
+        .inv-tab.active { color:#0ff; border-bottom-color:#0ff; background:rgba(0,255,255,0.03); }
+        .inv-tab-icon { font-size:13px; }
+        /* Scroll body */
+        #inv-body-scroll { flex:1; overflow-y:auto; overflow-x:hidden; }
+        #inv-body-scroll::-webkit-scrollbar { width:2px; }
+        #inv-body-scroll::-webkit-scrollbar-thumb { background:rgba(0,255,255,0.18); border-radius:1px; }
+        .inv-tab-panel { display:none; padding:12px 12px 16px; }
+        .inv-tab-panel.active { display:block; }
+        /* Créditos */
+        #inv-credits-box { display:flex; align-items:center; justify-content:space-between; padding:10px 12px; background:linear-gradient(90deg,rgba(255,200,0,0.06),rgba(255,200,0,0.02)); border:1px solid rgba(255,215,0,0.15); border-radius:3px; margin-bottom:10px; }
+        .inv-credits-label { font-family:'Orbitron',sans-serif; font-size:6px; letter-spacing:2px; color:rgba(255,215,0,0.4); }
+        .inv-credits-val { font-family:'Orbitron',sans-serif; font-size:20px; font-weight:900; color:#ffd700; text-shadow:0 0 16px rgba(255,215,0,0.3); }
+        .inv-credits-unit { font-size:8px; color:rgba(255,215,0,0.4); margin-left:3px; }
+        /* Status rows */
+        .inv-status-row { display:flex; align-items:center; gap:10px; padding:8px 10px; background:rgba(0,10,22,0.7); border:1px solid rgba(0,255,255,0.07); border-radius:3px; margin-bottom:6px; transition:border-color .15s; }
+        .inv-status-row:hover { border-color:rgba(0,255,255,0.18); }
+        .inv-status-icon { font-size:15px; flex-shrink:0; width:22px; text-align:center; }
+        .inv-status-info { flex:1; min-width:0; }
+        .inv-status-name { font-family:'Orbitron',sans-serif; font-size:6px; letter-spacing:1.5px; color:rgba(255,255,255,0.3); margin-bottom:3px; }
+        .inv-status-val { font-family:'Orbitron',sans-serif; font-size:9px; font-weight:700; color:rgba(255,255,255,0.85); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .inv-status-sub { font-size:7px; color:rgba(0,255,255,0.45); margin-top:1px; }
+        .inv-status-badge { flex-shrink:0; font-family:'Orbitron',sans-serif; font-size:6px; padding:2px 6px; border-radius:2px; letter-spacing:1px; }
+        .inv-status-badge.eq { background:rgba(0,255,100,0.12); border:1px solid rgba(0,255,100,0.3); color:#0f9; }
+        .inv-status-badge.none { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.25); }
+        .inv-mini-bar-wrap { width:100%; height:3px; background:rgba(255,255,255,0.05); border-radius:2px; overflow:hidden; margin-top:4px; }
+        .inv-mini-bar { height:100%; border-radius:2px; transition:width .2s; }
+        /* Section label */
+        .inv-sec { font-family:'Orbitron',sans-serif; font-size:6px; letter-spacing:3px; color:rgba(0,255,255,0.28); margin:12px 0 7px; display:flex; align-items:center; gap:8px; }
+        .inv-sec::after { content:''; flex:1; height:1px; background:rgba(0,255,255,0.08); }
+        /* Grid slots nuevo */
+        #inv-slots-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+        .inv-slot-new { background:rgba(0,8,20,0.85); border:1px solid rgba(0,255,255,0.08); border-radius:4px; min-height:90px; display:flex; flex-direction:column; align-items:stretch; position:relative; overflow:hidden; transition:border-color .15s,background .15s; cursor:default; }
+        .inv-slot-new.vacio { align-items:center; justify-content:center; min-height:72px; }
+        .inv-slot-new.vacio::before { content:''; width:20px; height:20px; border:1px dashed rgba(0,255,255,0.1); border-radius:50%; }
+        .inv-slot-new.ocu { border-color:rgba(0,255,255,0.14); cursor:pointer; }
+        .inv-slot-new.ocu:hover { border-color:rgba(0,255,255,0.45); background:rgba(0,16,36,0.9); box-shadow:0 0 16px rgba(0,200,255,0.07); }
+        .inv-slot-new.eq { border-color:rgba(0,255,100,0.35); background:rgba(0,14,8,0.7); box-shadow:inset 0 0 20px rgba(0,255,100,0.04); }
+        .inv-slot-new.eq::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,rgba(0,255,100,0.5),transparent); }
+        .inv-slot-stripe { height:2px; width:100%; flex-shrink:0; }
+        .inv-slot-inner { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:8px 6px 6px; text-align:center; gap:3px; }
+        .inv-slot-icon { font-size:22px; line-height:1; }
+        .inv-slot-name { font-family:'Orbitron',sans-serif; font-size:5.5px; letter-spacing:0.8px; color:rgba(255,255,255,0.8); line-height:1.3; max-width:90px; word-break:break-word; }
+        .inv-slot-type { font-size:5px; letter-spacing:1.5px; color:rgba(255,255,255,0.25); text-transform:uppercase; }
+        .inv-slot-extra { font-family:'Orbitron',sans-serif; font-size:7px; font-weight:700; margin-top:1px; }
+        .inv-eq-badge { position:absolute; top:5px; right:5px; font-size:5px; padding:1px 4px; background:rgba(0,255,100,0.15); border:1px solid rgba(0,255,100,0.35); border-radius:2px; color:#0f9; font-family:'Orbitron',sans-serif; letter-spacing:0.5px; }
+        .inv-rarity-dot { position:absolute; bottom:5px; left:5px; width:5px; height:5px; border-radius:50%; box-shadow:0 0 5px currentColor; }
+        .inv-slot-footer { display:none; background:rgba(0,6,16,0.97); border-top:1px solid rgba(0,255,255,0.12); padding:5px; gap:4px; flex-direction:row; justify-content:center; flex-wrap:wrap; }
+        .inv-slot-new.ocu:hover .inv-slot-footer { display:flex; }
+        .inv-slot-new.ocu:hover .inv-slot-inner { padding-bottom:4px; }
+        .inv-fb { font-size:6px; padding:3px 7px; border:1px solid rgba(0,255,255,0.3); background:transparent; color:#0ff; cursor:pointer; border-radius:2px; font-family:'Share Tech Mono',monospace; letter-spacing:0.5px; transition:all .12s; white-space:nowrap; }
+        .inv-fb:hover { background:rgba(0,255,255,0.12); }
+        .inv-fb.eq-btn { border-color:rgba(0,255,100,0.4); color:#0f9; }
+        .inv-fb.eq-btn:hover { background:rgba(0,255,100,0.12); }
+        .inv-fb.deseq-btn { border-color:rgba(255,120,0,0.4); color:#fa0; }
+        .inv-fb.deseq-btn:hover { background:rgba(255,120,0,0.12); }
+        .inv-fb.danger-btn { border-color:rgba(255,60,60,0.4); color:#f77; }
+        .inv-fb.danger-btn:hover { background:rgba(255,60,60,0.12); }
+        /* Mapa slot */
+        .inv-slot-new.mapa-slot { border-color:rgba(0,255,200,0.18); cursor:pointer; }
+        .inv-slot-new.mapa-slot:hover { border-color:rgba(0,255,200,0.5); background:rgba(0,16,26,0.9); }
+        .inv-slot-new.mapa-slot .inv-slot-name { color:rgba(0,255,200,0.9); }
+        /* Sonda badges */
+        .sonda-badge-new { position:absolute; top:5px; left:5px; font-size:5px; padding:1px 4px; border-radius:2px; font-family:'Orbitron',sans-serif; letter-spacing:0.5px; }
+        .sonda-badge-new.lista { background:rgba(0,60,40,0.5); border:1px solid rgba(0,255,200,0.25); color:rgba(0,255,200,0.65); }
+        .sonda-badge-new.volando { background:rgba(0,200,255,0.12); border:1px solid rgba(0,200,255,0.4); color:#0cf; animation:hudBlink 1.5s infinite; }
+        .sonda-badge-new.regresando { background:rgba(255,200,0,0.1); border:1px solid rgba(255,200,0,0.35); color:#ffd700; }
+        /* Bodega recursos */
+        #inv-bodega-grid { display:flex; flex-direction:column; gap:4px; }
+        .rec-card { display:flex; align-items:center; gap:10px; padding:8px 10px; background:rgba(0,8,20,0.8); border:1px solid rgba(255,215,0,0.1); border-radius:3px; cursor:pointer; transition:border-color .12s,background .12s; }
+        .rec-card:hover { border-color:rgba(0,255,255,0.35); background:rgba(0,16,36,0.9); box-shadow:0 0 12px rgba(0,200,255,0.05); }
+        .rec-icon { font-size:18px; flex-shrink:0; }
+        .rec-info { flex:1; min-width:0; }
+        .rec-name { font-family:'Orbitron',sans-serif; font-size:7px; letter-spacing:1px; color:rgba(255,255,255,0.82); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .rec-sub { font-size:6.5px; color:rgba(255,215,0,0.4); margin-top:2px; }
+        .rec-right { display:flex; flex-direction:column; align-items:flex-end; gap:2px; flex-shrink:0; }
+        .rec-qty { font-family:'Orbitron',sans-serif; font-size:13px; font-weight:900; color:#ffd700; }
+        .rec-val { font-size:6px; color:rgba(255,215,0,0.4); }
+        .rec-3d-hint { font-size:5.5px; color:rgba(0,255,255,0.3); font-family:'Orbitron',sans-serif; letter-spacing:1px; }
+        .inv-empty-hint { text-align:center; padding:22px 0; font-size:8px; color:rgba(255,255,255,0.15); letter-spacing:1px; }
+        /* Coordenadas nuevo */
+        .coord-card { background:rgba(0,8,20,0.8); border:1px solid rgba(0,255,100,0.12); border-radius:3px; padding:9px 10px; margin-bottom:5px; position:relative; transition:border-color .12s; }
+        .coord-card:hover { border-color:rgba(0,255,100,0.3); }
+        .coord-card-name { font-family:'Orbitron',sans-serif; font-size:8px; color:#0f9; margin-bottom:2px; letter-spacing:1px; padding-right:30px; }
+        .coord-card-tipo { font-size:6px; color:rgba(255,255,255,0.28); margin-bottom:5px; letter-spacing:1px; }
+        .coord-card-xy { font-family:'Share Tech Mono',monospace; font-size:7.5px; color:rgba(0,255,200,0.7); margin-bottom:3px; }
+        .coord-card-data { font-size:6px; color:rgba(255,255,255,0.35); line-height:1.7; }
+        .coord-del-btn { position:absolute; top:6px; right:8px; font-size:7px; padding:2px 6px; border:1px solid rgba(255,60,60,0.25); background:transparent; color:rgba(255,80,80,0.5); cursor:pointer; border-radius:1px; font-family:'Share Tech Mono',monospace; transition:all .12s; }
+        .coord-del-btn:hover { background:rgba(255,60,60,0.12); color:#f55; border-color:rgba(255,60,60,0.5); }
+        .inv-ammo-warn { font-size:8px; color:#fa0; padding:7px 10px; background:rgba(20,10,0,0.7); border:1px solid rgba(255,160,0,0.2); border-radius:2px; margin-top:8px; display:none; }
 
         /* ══ OVERLAY ESTACIÓN - DISEÑO MODERNO ══ */
         #overlay {
@@ -426,9 +496,9 @@
             display:flex; align-items:center; justify-content:space-between;
             padding:5px 8px; margin-bottom:3px;
             background:rgba(0,8,18,0.8); border:1px solid rgba(255,215,0,0.12);
-            border-radius:2px;
+            border-radius:2px; transition:border-color .15s, background .15s;
         }
-        .rec-row:hover { border-color:rgba(255,215,0,0.3); }
+        .rec-row:hover { border-color:rgba(0,255,255,0.4); background:rgba(0,20,40,0.9); box-shadow:0 0 12px rgba(0,255,255,0.05); }
         .rec-info { display:flex; align-items:center; gap:7px; }
         .rec-icono { font-size:15px; }
         .rec-nombre { font-family:'Orbitron',sans-serif; font-size:7px; color:rgba(255,255,255,0.8); }
@@ -1375,6 +1445,62 @@
         /* Flash pantalla aliado en peligro */
         #coop-ally-flash { position:fixed; inset:0; pointer-events:none; z-index:440; opacity:0; transition:opacity 0.1s; border:2px solid #00ff88; box-shadow:inset 0 0 60px rgba(0,255,100,0.1); }
     </style>
+
+    <!-- ══ GAME STATE COMPARTIDO ══ -->
+    <script src="gameState.js"></script>
+
+    <style>
+        /* ══ PROMPT ATERRIZAR ══ */
+        #prompt-aterrizar {
+            position:fixed; bottom:90px; left:50%; transform:translateX(-50%);
+            background:rgba(0,6,18,0.95); border:1px solid rgba(0,255,200,0.5);
+            border-radius:4px; padding:10px 24px; z-index:50;
+            font-family:'Orbitron',sans-serif; font-size:10px; letter-spacing:2px;
+            color:#00ffc8; text-align:center; pointer-events:none;
+            display:none; white-space:nowrap;
+            box-shadow:0 0 30px rgba(0,255,200,0.15), 0 0 0 1px rgba(0,255,200,0.08);
+            animation: promptPulse 1.8s ease-in-out infinite;
+        }
+        #prompt-aterrizar span { color:rgba(0,255,200,0.45); font-size:8px; display:block; margin-top:3px; letter-spacing:3px; }
+        @keyframes promptPulse { 0%,100%{box-shadow:0 0 20px rgba(0,255,200,0.15)} 50%{box-shadow:0 0 40px rgba(0,255,200,0.35)} }
+
+        /* ══ OVERLAY TRANSICIÓN ATERRIZAJE ══ */
+        #landing-overlay {
+            position:fixed; inset:0; z-index:900; pointer-events:none;
+            background:radial-gradient(ellipse at center, rgba(0,255,200,0.08) 0%, #000 70%);
+            opacity:0; transition:opacity 0.6s ease;
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+        }
+        #landing-overlay.show { opacity:1; pointer-events:all; }
+        #landing-msg {
+            font-family:'Orbitron',sans-serif; font-size:13px; letter-spacing:4px;
+            color:#00ffc8; text-shadow:0 0 20px rgba(0,255,200,0.8);
+            animation:warpText 0.5s ease-in-out infinite alternate;
+        }
+        @keyframes warpText { from{letter-spacing:4px;opacity:0.8} to{letter-spacing:8px;opacity:1} }
+        #landing-bar-wrap { width:200px; height:2px; background:rgba(0,255,200,0.1); margin-top:16px; border-radius:2px; overflow:hidden; }
+        #landing-bar { height:100%; background:#00ffc8; width:0%; transition:width 1.2s linear; box-shadow:0 0 8px #00ffc8; }
+
+        /* ══ IFRAME PLANETA ══ */
+        #planet-frame-wrap {
+            position:fixed; inset:0; z-index:800;
+            display:none; flex-direction:column;
+        }
+        #planet-frame-wrap.show { display:flex; }
+        #planet-iframe {
+            width:100%; flex:1; border:none;
+        }
+        #btn-volver-espacio {
+            position:fixed; top:14px; right:14px; z-index:850;
+            font-family:'Orbitron',sans-serif; font-size:8px; letter-spacing:2px;
+            background:rgba(0,6,18,0.95); border:1px solid rgba(0,255,200,0.4);
+            color:#00ffc8; padding:8px 14px; border-radius:3px; cursor:pointer;
+            display:none;
+            box-shadow:0 0 16px rgba(0,255,200,0.1);
+            transition:all 0.2s;
+        }
+        #btn-volver-espacio:hover { background:rgba(0,255,200,0.12); border-color:rgba(0,255,200,0.8); }
+    </style>
 </head>
 <body>
 
@@ -1668,24 +1794,127 @@
     <div id="hud-q-status" class="listo"><span id="hud-q-label">LISTO</span><span id="hud-q-timer"></span></div>
 </div>
 
-<!-- INVENTARIO HUD -->
+<!-- INVENTARIO HUD — NUEVO DISEÑO -->
 <div id="inv-hud">
-    <div id="inv-header">
-        <h2>📦 INVENTARIO</h2>
-        <span class="ih">[I] CERRAR</span>
-    </div>
-    <div id="inv-body">
-        <div class="inv-panel">
-            <div class="inv-panel-title">// ESTADÍSTICAS DE NAVE</div>
-            <div id="inv-stats"></div>
+    <div id="inv-header-bar">
+        <div class="inv-header-left">
+            <div class="inv-header-icon">📦</div>
+            <div>
+                <div class="inv-header-title">INVENTARIO</div>
+                <div class="inv-header-sub" id="inv-header-sub">NAVE ALPHA</div>
+            </div>
         </div>
-        <div class="inv-sec-label">// BODEGA — ITEMS</div>
-        <div class="inv-slots" id="inv-slots-grid"></div>
-        <div class="inv-ammo-warn" id="inv-ammo-warn">⚠ Sin munición — Restock en la estación (Tab Armamentos)</div>
-        <div class="inv-sec-label" id="inv-recursos-label" style="display:none">// RECURSOS RECOLECTADOS</div>
-        <div id="inv-recursos-grid"></div>
-        <div class="inv-sec-label" id="inv-coords-label" style="display:none">// COORDENADAS GUARDADAS 🗺</div>
-        <div id="inv-coords-grid"></div>
+        <button id="inv-close-btn" onclick="toggleInv()">ESC</button>
+    </div>
+    <div id="inv-tabs">
+        <button class="inv-tab active" onclick="switchInvTab('nave',this)">
+            <span class="inv-tab-icon">🚀</span>NAVE
+        </button>
+        <button class="inv-tab" onclick="switchInvTab('equipo',this)">
+            <span class="inv-tab-icon">⚡</span>EQUIPO
+        </button>
+        <button class="inv-tab" onclick="switchInvTab('bodega',this)">
+            <span class="inv-tab-icon">💎</span>BODEGA
+        </button>
+        <button class="inv-tab" onclick="switchInvTab('coords',this)">
+            <span class="inv-tab-icon">📡</span>MAPAS
+        </button>
+    </div>
+    <div id="inv-body-scroll">
+        <!-- PANEL NAVE -->
+        <div id="inv-panel-nave" class="inv-tab-panel active">
+            <div id="inv-credits-box">
+                <div class="inv-credits-label">CRÉDITOS</div>
+                <div><span class="inv-credits-val" id="inv-cred-val">0</span><span class="inv-credits-unit">CR</span></div>
+            </div>
+            <div class="inv-sec">ARMAMENTO</div>
+            <div class="inv-status-row">
+                <div class="inv-status-icon">🔫</div>
+                <div class="inv-status-info">
+                    <div class="inv-status-name">ARMA ACTIVA</div>
+                    <div class="inv-status-val" id="inv-arma-val">— Sin equipar</div>
+                    <div class="inv-status-sub" id="inv-arma-sub"></div>
+                </div>
+                <div class="inv-status-badge none" id="inv-arma-badge">—</div>
+            </div>
+            <div class="inv-sec">SISTEMAS</div>
+            <div class="inv-status-row">
+                <div class="inv-status-icon">💠</div>
+                <div class="inv-status-info">
+                    <div class="inv-status-name">ESCUDO</div>
+                    <div class="inv-status-val" id="inv-esc-val">— Sin equipar</div>
+                    <div class="inv-mini-bar-wrap" id="inv-esc-bar-wrap" style="display:none">
+                        <div class="inv-mini-bar" id="inv-esc-bar" style="background:linear-gradient(90deg,#0044cc,#00aaff)"></div>
+                    </div>
+                </div>
+                <div class="inv-status-badge none" id="inv-esc-badge">—</div>
+            </div>
+            <div class="inv-status-row">
+                <div class="inv-status-icon">⚙️</div>
+                <div class="inv-status-info">
+                    <div class="inv-status-name">PROPULSIÓN</div>
+                    <div class="inv-status-val" id="inv-mot-val">Motor Estándar</div>
+                    <div class="inv-status-sub" id="inv-mot-sub"></div>
+                </div>
+                <div class="inv-status-badge none" id="inv-mot-badge">—</div>
+            </div>
+            <div class="inv-sec">INTEGRIDAD</div>
+            <div class="inv-status-row">
+                <div class="inv-status-icon">🛡️</div>
+                <div class="inv-status-info">
+                    <div class="inv-status-name">CASCO</div>
+                    <div class="inv-status-val" id="inv-hull-val">100%</div>
+                    <div class="inv-mini-bar-wrap">
+                        <div class="inv-mini-bar" id="inv-hull-bar" style="background:linear-gradient(90deg,#cc0000,#ff5555);width:100%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="inv-status-row">
+                <div class="inv-status-icon">⛽</div>
+                <div class="inv-status-info">
+                    <div class="inv-status-name">COMBUSTIBLE</div>
+                    <div class="inv-status-val" id="inv-fuel-val">100%</div>
+                    <div class="inv-mini-bar-wrap">
+                        <div class="inv-mini-bar" id="inv-fuel-bar" style="background:linear-gradient(90deg,#c84000,#ffa500);width:100%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="inv-ammo-warn" id="inv-ammo-warn">⚠ SIN MUNICIÓN — Recargá en la estación espacial</div>
+        </div>
+        <!-- PANEL EQUIPO -->
+        <div id="inv-panel-equipo" class="inv-tab-panel">
+            <div id="inv-slots-grid"></div>
+        </div>
+        <!-- PANEL BODEGA -->
+        <div id="inv-panel-bodega" class="inv-tab-panel">
+            <div id="inv-bodega-grid"></div>
+        </div>
+        <!-- PANEL MAPAS -->
+        <div id="inv-panel-coords" class="inv-tab-panel">
+            <div id="inv-coords-grid"></div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DETALLE 3D DE ITEM -->
+<div id="item3d-overlay">
+    <div id="item3d-modal">
+        <button id="item3d-close" onclick="cerrarItem3D()">✕</button>
+        <div id="item3d-canvas-wrap">
+            <canvas id="item3d-canvas"></canvas>
+            <div id="item3d-glow-ring"></div>
+            <div id="item3d-rotate-hint">ARRASTRÁ PARA ROTAR</div>
+        </div>
+        <div id="item3d-info">
+            <div id="item3d-tag">ITEM — NAVE ALPHA</div>
+            <div id="item3d-nombre">—</div>
+            <div id="item3d-rarity-bar" data-label=""></div>
+            <span id="item3d-tipo-badge">—</span>
+            <div id="item3d-desc">—</div>
+            <div id="item3d-stats-grid"></div>
+            <div id="item3d-extra-stats"></div>
+            <div id="item3d-actions"></div>
+        </div>
     </div>
 </div>
 
@@ -2336,6 +2565,138 @@
     .modo-card { width:100%; max-width:380px; }
     #inicio-titulo { letter-spacing:5px; }
 }
+
+/* ══ MODAL DETALLE 3D DE ITEM ══ */
+#item3d-overlay {
+    display:none; position:fixed; inset:0; z-index:5000;
+    background:rgba(0,2,14,0.88); backdrop-filter:blur(18px);
+    animation:item3dFadeIn 0.2s ease;
+}
+#item3d-overlay.show { display:flex; align-items:center; justify-content:center; }
+@keyframes item3dFadeIn { from{opacity:0} to{opacity:1} }
+
+#item3d-modal {
+    position:relative; display:flex; gap:0;
+    width:min(780px,96vw); max-height:90vh;
+    background:linear-gradient(135deg,rgba(0,8,24,0.98) 0%,rgba(0,4,16,0.99) 100%);
+    border:1px solid rgba(0,255,255,0.25);
+    border-radius:6px; overflow:hidden;
+    box-shadow:0 0 0 1px rgba(0,255,255,0.06), 0 0 80px rgba(0,180,255,0.1), 0 40px 120px rgba(0,0,0,0.7);
+}
+#item3d-modal::before {
+    content:''; position:absolute; top:0; left:60px; right:60px; height:1px;
+    background:linear-gradient(90deg,transparent,rgba(0,255,255,0.6),transparent);
+    z-index:1;
+}
+
+/* Panel izquierdo — canvas 3D */
+#item3d-canvas-wrap {
+    position:relative; width:280px; min-width:280px; height:380px;
+    background:radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,40,80,0.4) 0%, transparent 70%),
+               linear-gradient(180deg,rgba(0,8,24,1) 0%,rgba(0,4,16,1) 100%);
+    border-right:1px solid rgba(0,255,255,0.1); overflow:hidden; flex-shrink:0;
+}
+#item3d-canvas { width:100%; height:100%; display:block; }
+#item3d-canvas-wrap::after {
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(ellipse 70% 30% at 50% 90%, rgba(0,100,200,0.12) 0%, transparent 70%);
+}
+#item3d-glow-ring {
+    position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
+    width:120px; height:14px; border-radius:50%;
+    background:radial-gradient(ellipse,rgba(0,200,255,0.18) 0%,transparent 70%);
+    pointer-events:none;
+}
+#item3d-rotate-hint {
+    position:absolute; bottom:8px; left:0; right:0; text-align:center;
+    font-family:'Orbitron',sans-serif; font-size:6px; letter-spacing:2px;
+    color:rgba(0,255,255,0.22); pointer-events:none;
+}
+
+/* Panel derecho — detalles */
+#item3d-info {
+    flex:1; padding:24px 22px 20px 22px; overflow-y:auto; display:flex; flex-direction:column;
+}
+#item3d-info::-webkit-scrollbar { width:2px; }
+#item3d-info::-webkit-scrollbar-thumb { background:rgba(0,255,255,0.15); }
+
+#item3d-tag {
+    font-family:'Orbitron',sans-serif; font-size:6px; letter-spacing:4px;
+    color:rgba(0,255,255,0.3); margin-bottom:6px;
+}
+#item3d-nombre {
+    font-family:'Orbitron',sans-serif; font-size:18px; font-weight:900;
+    color:#fff; letter-spacing:2px; margin-bottom:4px; line-height:1.2;
+    text-shadow:0 0 20px rgba(0,255,255,0.2);
+}
+#item3d-tipo-badge {
+    display:inline-block; font-family:'Orbitron',sans-serif; font-size:6px;
+    letter-spacing:2px; padding:3px 10px; border-radius:20px; margin-bottom:14px;
+}
+#item3d-desc {
+    font-size:9px; color:rgba(255,255,255,0.45); line-height:1.8;
+    margin-bottom:14px; border-left:2px solid rgba(0,255,255,0.12);
+    padding-left:10px;
+}
+#item3d-stats-grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:16px;
+}
+.i3d-stat {
+    background:rgba(0,10,24,0.8); border:1px solid rgba(0,255,255,0.08);
+    border-radius:3px; padding:8px 10px;
+}
+.i3d-stat-label {
+    font-family:'Orbitron',sans-serif; font-size:5.5px; letter-spacing:2px;
+    color:rgba(0,255,255,0.3); margin-bottom:3px;
+}
+.i3d-stat-val {
+    font-size:12px; font-weight:700; color:#fff;
+    font-family:'Orbitron',sans-serif;
+}
+.i3d-stat-val.gold { color:#ffd700; text-shadow:0 0 8px rgba(255,215,0,0.3); }
+.i3d-stat-val.cyan { color:#00ffff; text-shadow:0 0 8px rgba(0,255,255,0.3); }
+.i3d-stat-val.green{ color:#00ff88; text-shadow:0 0 8px rgba(0,255,136,0.3); }
+.i3d-stat-val.red  { color:#ff4444; text-shadow:0 0 8px rgba(255,68,68,0.3); }
+.i3d-stat-val.purple{color:#cc80ff; text-shadow:0 0 8px rgba(200,128,255,0.3);}
+
+#item3d-extra-stats {
+    font-size:8px; color:rgba(255,255,255,0.38); line-height:2;
+    white-space:pre-line; margin-bottom:16px;
+    background:rgba(0,6,18,0.6); border:1px solid rgba(0,255,255,0.07);
+    border-radius:3px; padding:10px 12px;
+}
+
+#item3d-actions { display:flex; gap:8px; margin-top:auto; flex-wrap:wrap; }
+.i3d-btn {
+    flex:1; min-width:80px; padding:9px 12px; border-radius:3px;
+    font-family:'Orbitron',sans-serif; font-size:7px; letter-spacing:2px;
+    cursor:pointer; transition:all 0.2s; text-transform:uppercase; border:1px solid;
+}
+.i3d-btn.primary { border-color:rgba(0,255,255,0.4); background:rgba(0,255,255,0.07); color:#0ff; }
+.i3d-btn.primary:hover { background:rgba(0,255,255,0.16); box-shadow:0 0 16px rgba(0,255,255,0.1); }
+.i3d-btn.danger  { border-color:rgba(255,80,80,0.4); background:rgba(255,80,80,0.07); color:#f55; }
+.i3d-btn.danger:hover  { background:rgba(255,80,80,0.14); }
+.i3d-btn.warn    { border-color:rgba(255,180,0,0.4); background:rgba(255,180,0,0.07); color:#ffa0; }
+.i3d-btn.warn:hover    { background:rgba(255,180,0,0.14); }
+.i3d-btn.green   { border-color:rgba(0,255,100,0.4); background:rgba(0,255,100,0.07); color:#0f9; }
+.i3d-btn.green:hover   { background:rgba(0,255,100,0.14); }
+.i3d-btn:disabled { opacity:0.22; cursor:not-allowed; }
+
+#item3d-close {
+    position:absolute; top:10px; right:12px; background:none; border:none;
+    color:rgba(0,255,255,0.3); font-size:18px; cursor:pointer; z-index:2;
+    transition:color 0.2s; line-height:1; padding:4px;
+}
+#item3d-close:hover { color:rgba(0,255,255,0.9); }
+
+#item3d-rarity-bar {
+    height:2px; border-radius:1px; margin-bottom:14px; position:relative; overflow:visible;
+}
+#item3d-rarity-bar::after {
+    content:attr(data-label);
+    position:absolute; right:0; top:-14px;
+    font-family:'Orbitron',sans-serif; font-size:6px; letter-spacing:2px;
+}
 </style>
 
 <script>
@@ -2681,8 +3042,27 @@
         <hr class="hp-sep">
         <div class="hp-nuevo" id="hp-nuevo-tag">★ NUEVO DESCUBRIMIENTO</div>
         <button id="btn-guardar-coord" onclick="guardarCoordenadas()">📌 GUARDAR COORDENADAS</button>
+        <button id="btn-aterrizar-hud" onclick="iniciarAterrizaje()" style="display:none;margin-top:6px;width:100%;font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;background:rgba(0,255,180,0.12);border:1px solid rgba(0,255,180,0.5);color:#00ffb4;padding:7px 0;border-radius:3px;cursor:pointer;">🚀 ATERRIZAR</button>
     </div>
 </div>
+
+<!-- ══ PROMPT ATERRIZAR (flotante abajo centro) ══ -->
+<div id="prompt-aterrizar">
+    [E] ATERRIZAR
+    <span id="prompt-planeta-nombre">—</span>
+</div>
+
+<!-- ══ OVERLAY TRANSICIÓN ══ -->
+<div id="landing-overlay">
+    <div id="landing-msg">ENTRANDO EN ÓRBITA</div>
+    <div id="landing-bar-wrap"><div id="landing-bar"></div></div>
+</div>
+
+<!-- ══ IFRAME PLANETA ══ -->
+<div id="planet-frame-wrap">
+    <iframe id="planet-iframe" src="" allowfullscreen></iframe>
+</div>
+<button id="btn-volver-espacio" onclick="volverAlEspacio()">← VOLVER AL ESPACIO</button>
 
 <script>
 window.onload = function() {
@@ -2824,6 +3204,7 @@ window.onload = function() {
         equipado:{ arma:null, escudo:null, motor:null },
         lootBodega: {}
     };
+    window._UA_nave = nave;
 
     const proyectiles = [];
     let tickCad = 0;
@@ -3015,7 +3396,19 @@ window.onload = function() {
         'nodo_iridium':       {nombre:'Nodo de Iridium',    icono:'💜', precio:25,  cat:'minerales',  src:'ter'},
         'fragmento_pulsar':   {nombre:'Fragmento Pulsar',   icono:'🔵', precio:25,  cat:'exoticos',   src:'ter'},
         'nucleo_nebular':     {nombre:'Núcleo Nebular',     icono:'⬜', precio:25,  cat:'legendario', src:'ter'},
+        // Recursos de planetas jugables (Galaxia Orión Central)
+        'flower':       {nombre:'Flor Energética',     icono:'🌸', precio:20,  cat:'planetario', src:'planeta'},
+        'iridium':      {nombre:'Iridium',             icono:'💜', precio:60,  cat:'minerales',  src:'planeta'},
+        'nebular':      {nombre:'Núcleo Nebular',      icono:'🌀', precio:120, cat:'exoticos',   src:'planeta'},
+        'arbol_mini':   {nombre:'Árbol Miniaturizado', icono:'🌿', precio:35,  cat:'organicos',  src:'planeta'},
+        'cristal':      {nombre:'Cristal Energético',  icono:'💎', precio:90,  cat:'minerales',  src:'planeta'},
+        'nucleo':       {nombre:'Núcleo de Iridio',    icono:'🔮', precio:150, cat:'exoticos',   src:'planeta'},
+        'catalizador':  {nombre:'Catalizador Nebular', icono:'⚗️',  precio:200, cat:'exoticos',   src:'planeta'},
+        'biomasa':      {nombre:'Pila de Biomasa',     icono:'🧬', precio:45,  cat:'organicos',  src:'planeta'},
+        'h2o':          {nombre:'Partícula H2O',       icono:'💧', precio:30,  cat:'organicos',  src:'planeta'},
+        'antena_grav':  {nombre:'Antena Gravitatoria', icono:'📡', precio:80,  cat:'exoticos',   src:'planeta'},
     };
+    window._UA_LOOT_DEFS = LOOT_DEFS; // Exponer para el modal 3D
 
     // Tablas de loot por tipo
     const LOOT_TABLE_AST = [
@@ -3098,9 +3491,15 @@ window.onload = function() {
     }
 
     function lootTotalValor() {
-        return nave.inventario
-            .filter(i => i._esRecurso)
-            .reduce((s, i) => s + (i.precio||0) * (i.qty||1), 0);
+        // Bodega (asteroides/cometas/terrestres)
+        const deBodega = Object.keys(nave.lootBodega).reduce((s,id)=>{
+            const def=LOOT_DEFS[id]; return s+(def?def.precio*nave.lootBodega[id]:0);
+        },0);
+        // Inventario de planetas jugables
+        const dePlanetas = nave.inventario
+            .filter(i => i._esRecurso && LOOT_DEFS[i.id])
+            .reduce((s,i) => s + LOOT_DEFS[i.id].precio * (i.qty||1), 0);
+        return deBodega + dePlanetas;
     }
 
     function recogerLootCercano() {
@@ -3376,7 +3775,9 @@ window.onload = function() {
     };
 
     // Inicializar ángulos de órbita como estado mutable
+    window._UA_SISTEMAS_SOLARES = SISTEMAS_SOLARES;
     const orbitalState = {};
+    window._UA_orbitalState = orbitalState;
     Object.entries(SISTEMAS_SOLARES).forEach(([solId, sistema])=>{
         orbitalState[solId] = sistema.planetas.map(p=>({
             ang: p.ang,
@@ -3505,6 +3906,7 @@ window.onload = function() {
         // ══ TERRESTRES ══
         {id:"XENARA-7",        x:1125000, y:750000,  r:155, tipo:"terrestre"},
     ];
+    window._UA_planetas = planetas;
     const estacion = {x:1137000,y:1128000,r:160,ang:0};
 
     /* ══ INPUT ══ */
@@ -3955,170 +4357,236 @@ window.onload = function() {
     /* ══ INVENTARIO HUD ══ */
     function toggleInv() {
         invAbierto=!invAbierto;
-        document.getElementById('inv-hud').style.display=invAbierto?'block':'none';
+        const invEl = document.getElementById('inv-hud');
+        if(invEl){ invEl.style.display=invAbierto?'flex':'none'; if(invAbierto) invEl.classList.add('open'); else invEl.classList.remove('open'); }
         if(invAbierto){ renderInv(); setTimeout(drawStarMap,80); }
     }
 
+    /* ══ Tab switcher del inventario ══ */
+    window.switchInvTab = function(name, btn) {
+        document.querySelectorAll('.inv-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.inv-tab-panel').forEach(p => p.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+        const panel = document.getElementById('inv-panel-' + name);
+        if(panel) panel.classList.add('active');
+    };
+
     function renderInv() {
-        // Stats
-        const aI=nave.equipado.arma   ? buscarItem(nave.equipado.arma)   : null;
-        const eI=nave.equipado.escudo  ? buscarItem(nave.equipado.escudo) : null;
-        const mI=nave.equipado.motor   ? buscarItem(nave.equipado.motor)  : null;
-        document.getElementById('inv-stats').innerHTML=`
-            <div class="inv-stat-row"><span>🔫 Armamento</span><span>${aI?aI.nombre:'— Sin equipar'}</span></div>
-            ${aI?`<div class="inv-stat-row"><span style="padding-left:10px">Munición</span><span style="color:#ffd700">${nave.municion[aI.id]||0}/${aI.munMax}</span></div>`:''}
-            <div class="inv-stat-row"><span>💠 Escudo</span><span>${eI?eI.nombre:'— Sin equipar'}</span></div>
-            ${eI?`<div class="inv-stat-row"><span style="padding-left:10px">HP</span><span>${Math.round(nave.shield)}/${nave.shieldMax}</span></div>`:''}
-            <div class="inv-stat-row"><span>🚀 Motor</span><span>${mI?mI.nombre:'— Sin equipar'}</span></div>
-            <div class="inv-stat-row" style="margin-top:6px;border-top:1px solid rgba(0,255,255,0.1);padding-top:6px;"><span>Empuje</span><span>${nave.emp.toFixed(2)}</span></div>
-            <div class="inv-stat-row"><span>Fricción</span><span>${nave.frict.toFixed(3)}</span></div>
-            <div class="inv-stat-row"><span>💰 Créditos</span><span style="color:#ffd700">${nave.credits} CR</span></div>
-        `;
-        // Slots
-        const g=document.getElementById('inv-slots-grid'); g.innerHTML='';
-        for(let i=0;i<12;i++){
-            const item=nave.inventario[i];
-            const div=document.createElement('div');
-            if(!item){
-                div.className='inv-slot';
-                div.innerHTML='<span class="sv">·</span>';
+        const aI = nave.equipado.arma   ? buscarItem(nave.equipado.arma)   : null;
+        const eI = nave.equipado.escudo  ? buscarItem(nave.equipado.escudo) : null;
+        const mI = nave.equipado.motor   ? buscarItem(nave.equipado.motor)  : null;
+
+        /* ── Panel NAVE ── */
+        const cv = document.getElementById('inv-cred-val');
+        if(cv) cv.textContent = nave.credits.toLocaleString();
+
+        const av = document.getElementById('inv-arma-val'), as_ = document.getElementById('inv-arma-sub'), ab = document.getElementById('inv-arma-badge');
+        if(av) av.textContent = aI ? aI.nombre : '— Sin equipar';
+        if(as_) as_.textContent = aI ? `${nave.municion[aI.id]||0}/${aI.munMax} MUNIC` : '';
+        if(ab) { ab.textContent = aI ? 'EQ' : '—'; ab.className = 'inv-status-badge ' + (aI ? 'eq' : 'none'); }
+
+        const ev = document.getElementById('inv-esc-val'), ebd = document.getElementById('inv-esc-badge');
+        const ebw = document.getElementById('inv-esc-bar-wrap'), ebb = document.getElementById('inv-esc-bar');
+        if(ev) ev.textContent = eI ? eI.nombre : '— Sin equipar';
+        if(ebd) { ebd.textContent = eI ? 'EQ' : '—'; ebd.className = 'inv-status-badge ' + (eI ? 'eq' : 'none'); }
+        if(ebw) ebw.style.display = eI ? 'block' : 'none';
+        if(ebb && eI && nave.shieldMax > 0) ebb.style.width = Math.round(nave.shield / nave.shieldMax * 100) + '%';
+
+        const mov = document.getElementById('inv-mot-val'), mos = document.getElementById('inv-mot-sub'), mob = document.getElementById('inv-mot-badge');
+        if(mov) mov.textContent = mI ? mI.nombre : '— Motor Estándar';
+        if(mos) mos.textContent = `EMP ${nave.emp.toFixed(2)} · FRICT ${nave.frict.toFixed(3)}`;
+        if(mob) { mob.textContent = mI ? 'EQ' : '—'; mob.className = 'inv-status-badge ' + (mI ? 'eq' : 'none'); }
+
+        const hv = document.getElementById('inv-hull-val'), hb = document.getElementById('inv-hull-bar');
+        if(hv) { hv.textContent = Math.round(nave.hull) + '%'; hv.style.color = nave.hull > 50 ? '#ff5555' : '#ff2222'; }
+        if(hb) hb.style.width = nave.hull + '%';
+
+        const fv = document.getElementById('inv-fuel-val'), fb = document.getElementById('inv-fuel-bar');
+        if(fv) { fv.textContent = Math.round(nave.fuel) + '%'; fv.style.color = nave.fuel > 30 ? '#ffa500' : '#ff4400'; }
+        if(fb) fb.style.width = nave.fuel + '%';
+
+        const sinMu = aI && (nave.municion[aI.id]||0) === 0;
+        const aw = document.getElementById('inv-ammo-warn');
+        if(aw) aw.style.display = sinMu ? 'block' : 'none';
+
+        /* ── Panel EQUIPO: grid de slots ── */
+        const g = document.getElementById('inv-slots-grid');
+        if(!g) return;
+        g.innerHTML = '';
+
+        const STRIPES = {
+            arma:   'linear-gradient(90deg,#ff4444,#ff8888)',
+            escudo: 'linear-gradient(90deg,#0066ff,#00aaff)',
+            motor:  'linear-gradient(90deg,#44ff88,#00cc66)',
+            sonda:  'linear-gradient(90deg,#8855ff,#aa66ff)',
+            tanque: 'linear-gradient(90deg,#ff6600,#ffaa00)',
+            recurso:'linear-gradient(90deg,#886633,#ccaa44)',
+        };
+        const RARITY_COL = (item) => {
+            const p = item.precio||(window._UA_LOOT_DEFS?.[item.id]?.precio)||0;
+            if(p>=1000||['nucleo_nebular','nebular','sniper','missile','antigrav'].includes(item.id)) return '#ff8800';
+            if(p>=400||['aleacion_oscura','nucleo_helado','warp_drive','titan','catalizador'].includes(item.id)) return '#cc80ff';
+            if(p>=80||['cristal_cuarzo','reflex','plasma','railgun'].includes(item.id)) return '#00aaff';
+            if(p>=25) return '#00dd88';
+            return '#888888';
+        };
+
+        for(let i = 0; i < 12; i++) {
+            const item = nave.inventario[i];
+            const div = document.createElement('div');
+
+            if(!item) {
+                div.className = 'inv-slot-new vacio';
             } else if(item._esTanque) {
-                div.className='inv-slot fuel-tank';
-                div.innerHTML=`
-                    <div class="si">${item.icono}</div>
-                    <div class="sn" style="color:rgba(255,160,0,0.9)">${item.nombre}</div>
-                    <div class="st">COMBUSTIBLE</div>
-                    <div class="smu" style="color:rgba(255,160,0,0.7)">+${item.fuelAmount}%</div>
-                    <div class="ft-actions">
-                        <button class="inv-act-btn" style="border-color:rgba(255,140,0,0.5);color:#fa0;" onclick="usarTanque(${i})">⛽ USAR</button>
+                div.className = 'inv-slot-new ocu';
+                div.innerHTML = `
+                    <div class="inv-slot-stripe" style="background:${STRIPES.tanque}"></div>
+                    <div class="inv-slot-inner">
+                        <div class="inv-slot-icon">${item.icono}</div>
+                        <div class="inv-slot-name">${item.nombre}</div>
+                        <div class="inv-slot-type">COMBUSTIBLE</div>
+                        <div class="inv-slot-extra" style="color:#ffa500">+${item.fuelAmount}%</div>
                     </div>
-                `;
+                    <div class="inv-slot-footer">
+                        <button class="inv-fb" onclick="event.stopPropagation();abrirItem3D(${i})">🔍 VER</button>
+                        <button class="inv-fb eq-btn" onclick="event.stopPropagation();usarTanque(${i})">⛽ USAR</button>
+                    </div>`;
+                div.onclick = () => abrirItem3D(i);
+
             } else if(item._esSonda) {
                 const estado = item._sondaEstado || 'lista';
                 const estadoLabel = {lista:'LISTA',volando:'EN VUELO',regresando:'REGRESANDO'}[estado]||estado;
-                const claseSlot = estado==='lista'?'':'(estado==="volando"?"en-vuelo":"regresando")'.replace('(estado==="volando"?"en-vuelo":"regresando")', estado==='volando'?' en-vuelo':' regresando');
-                div.className = `inv-slot sonda-slot${estado!=='lista'?' '+(estado==='volando'?'en-vuelo':'regresando'):''}`;
                 const hallCount = item._hallazgos?.length||0;
-                // Construir botones según estado
-                let botonesHTML = '';
-                if(estado === 'lista') {
-                    botonesHTML = `<button class="sonda-inv-btn" onclick="lanzarSondaDeInv(${i})">🛸 LANZAR</button>`;
-                    if(hallCount > 0) botonesHTML += `<button class="sonda-inv-btn" onclick="verHallazgosSonda(${i})">📋 VER (${hallCount})</button>`;
-                } else if(estado === 'volando') {
-                    botonesHTML = `<button class="sonda-inv-btn" onclick="verHallazgosSonda(${i})">📋 HALLAZGOS (${hallCount})</button>
-                                   <button class="sonda-inv-btn warn" onclick="llamarSondaDeRegreso()">📡 LLAMAR</button>
-                                   <button class="sonda-inv-btn danger" onclick="cancelarSondaActiva()">💥 DESTRUIR</button>`;
-                } else if(estado === 'regresando') {
-                    botonesHTML = `<button class="sonda-inv-btn" onclick="verHallazgosSonda(${i})">📋 HALLAZGOS (${hallCount})</button>
-                                   <button class="sonda-inv-btn warn" style="opacity:0.5" disabled>🔄 REGRESANDO...</button>`;
+                div.className = 'inv-slot-new ocu';
+                let btns = '';
+                if(estado==='lista') {
+                    btns = `<button class="inv-fb eq-btn" onclick="event.stopPropagation();lanzarSondaDeInv(${i})">🛸 LANZAR</button>`;
+                    if(hallCount>0) btns += `<button class="inv-fb" onclick="event.stopPropagation();verHallazgosSonda(${i})">📋 (${hallCount})</button>`;
+                } else if(estado==='volando') {
+                    btns = `<button class="inv-fb" onclick="event.stopPropagation();verHallazgosSonda(${i})">📋 (${hallCount})</button>
+                            <button class="inv-fb deseq-btn" onclick="event.stopPropagation();llamarSondaDeRegreso()">📡 LLAMAR</button>
+                            <button class="inv-fb danger-btn" onclick="event.stopPropagation();cancelarSondaActiva()">💥</button>`;
+                } else {
+                    btns = `<button class="inv-fb" onclick="event.stopPropagation();verHallazgosSonda(${i})">📋 (${hallCount})</button>
+                            <button class="inv-fb" style="opacity:.5" disabled>🔄 ...</button>`;
                 }
-                div.innerHTML=`
-                    <div class="sonda-badge ${estado==='lista'?'lista':estado==='volando'?'volando':'regresando'}">${estadoLabel}</div>
-                    <div class="si">${item.icono}</div>
-                    <div class="sn" style="color:rgba(0,255,200,0.9);font-size:5.5px">${item.nombre}</div>
-                    <div class="st">SONDA</div>
-                    <div class="sonda-inv-actions">${botonesHTML}</div>
-                `;
+                div.innerHTML = `
+                    <div class="inv-slot-stripe" style="background:${STRIPES.sonda}"></div>
+                    <div class="sonda-badge-new ${estado}">${estadoLabel}</div>
+                    <div class="inv-slot-inner" style="padding-top:18px">
+                        <div class="inv-slot-icon">${item.icono}</div>
+                        <div class="inv-slot-name">${item.nombre}</div>
+                        <div class="inv-slot-type">SONDA</div>
+                        ${hallCount>0?`<div class="inv-slot-extra" style="color:#00ffcc;font-size:5.5px">${hallCount} hallazgos</div>`:''}
+                    </div>
+                    <div class="inv-slot-footer">
+                        <button class="inv-fb" onclick="event.stopPropagation();abrirItem3D(${i})">🔍 VER</button>
+                        ${btns}
+                    </div>`;
+                div.onclick = () => abrirItem3D(i);
+
             } else if(item._esRecurso) {
-                div.className='inv-slot ocu recurso-slot';
-                const catColor = item.cat==='organicos' ? 'rgba(80,200,255,0.7)' : 'rgba(180,140,90,0.9)';
-                div.innerHTML=`
-                    <div class="si">${item.icono}</div>
-                    <div class="sn" style="color:${catColor};font-size:5.5px">${item.nombre}</div>
-                    <div class="st" style="color:${catColor};opacity:0.7">RECURSO</div>
-                    <div class="smu" style="color:#ffd700;font-size:9px">x${item.qty||1}</div>
-                    <div class="inv-actions">
-                        <button class="inv-act-btn" style="border-color:rgba(255,200,0,0.4);color:#ffd700;font-size:6px" onclick="tirarRecurso('${item.id}');renderInv()">TIRAR</button>
+                div.className = 'inv-slot-new ocu';
+                const catColor = item.cat==='organicos'?'#80c8ff':item.cat==='exoticos'?'#cc80ff':'#ccaa66';
+                div.innerHTML = `
+                    <div class="inv-slot-stripe" style="background:${STRIPES.recurso}"></div>
+                    <div class="inv-slot-inner">
+                        <div class="inv-slot-icon">${item.icono}</div>
+                        <div class="inv-slot-name" style="color:${catColor}">${item.nombre}</div>
+                        <div class="inv-slot-type" style="color:${catColor};opacity:.6">RECURSO</div>
+                        <div class="inv-slot-extra" style="color:#ffd700">x${item.qty||1}</div>
                     </div>
-                `;
+                    <div class="inv-slot-footer">
+                        <button class="inv-fb" onclick="event.stopPropagation();abrirItem3D(${i})">🔍 VER</button>
+                        <button class="inv-fb danger-btn" onclick="event.stopPropagation();tirarRecurso('${item.id}');renderInv()">TIRAR</button>
+                    </div>`;
+                div.onclick = () => abrirItem3D(i);
+
             } else {
-                const ek=getEqKey(item.id), eq=nave.equipado[ek]===item.id;
-                div.className='inv-slot ocu'+(eq?' eq':'');
-                const mu=item.munMax?`<div class="smu">${nave.municion[item.id]||0}/${item.munMax}</div>`:'';
-                // HP del escudo si está equipado
+                const ek = getEqKey(item.id);
+                const eq = nave.equipado[ek] === item.id;
+                div.className = 'inv-slot-new ocu' + (eq ? ' eq' : '');
+                const mu = item.munMax ? `<div class="inv-slot-extra" style="color:#ffd700">${nave.municion[item.id]||0}/${item.munMax}</div>` : '';
                 const shieldInfo = (ek==='escudo' && eq && nave.shieldMax>0)
-                    ? `<div class="smu" style="color:${nave.shield/nave.shieldMax>0.5?'#00aaff':'#ff4444'}">${Math.round(nave.shield)}/${nave.shieldMax}</div>` : '';
-                // Color del tipo según equipo
-                const ekColor = ek==='escudo'?'rgba(0,180,255,0.7)':ek==='arma'?'rgba(255,100,100,0.7)':'rgba(100,255,100,0.7)';
-                div.innerHTML=`
-                    <div class="si">${item.icono}</div>
-                    <div class="sn">${item.nombre}</div>
-                    <div class="st" style="color:${ekColor}">${ek.toUpperCase()}</div>${mu}${shieldInfo}
-                    ${eq?'<div class="se">●EQ</div>':''}
-                    <div class="inv-actions">
-                        ${eq
-                            ?`<button class="inv-act-btn deseq" onclick="desequiparItem('${ek}');renderInv()">DESEQUIPAR</button>`
-                            :`<button class="inv-act-btn" onclick="equiparItem('${item.id}','${ek}');renderInv()">EQUIPAR</button>`}
+                    ? `<div class="inv-slot-extra" style="color:${nave.shield/nave.shieldMax>0.5?'#00aaff':'#ff4444'};font-size:5.5px">${Math.round(nave.shield)}/${nave.shieldMax} HP</div>` : '';
+                const stripe = STRIPES[ek] || STRIPES.arma;
+                const rarCol = RARITY_COL(item);
+                div.innerHTML = `
+                    <div class="inv-slot-stripe" style="background:${stripe}"></div>
+                    <div class="inv-slot-inner">
+                        <div class="inv-slot-icon">${item.icono}</div>
+                        <div class="inv-slot-name">${item.nombre}</div>
+                        <div class="inv-slot-type">${ek?ek.toUpperCase():''}</div>
+                        ${mu}${shieldInfo}
                     </div>
-                `;
+                    ${eq?'<div class="inv-eq-badge">EQ</div>':''}
+                    <div class="inv-rarity-dot" style="background:${rarCol};color:${rarCol}"></div>
+                    <div class="inv-slot-footer">
+                        <button class="inv-fb" onclick="event.stopPropagation();abrirItem3D(${i})">🔍 VER</button>
+                        ${eq
+                            ?`<button class="inv-fb deseq-btn" onclick="event.stopPropagation();desequiparItem('${ek}');renderInv()">DESEQUIPAR</button>`
+                            :`<button class="inv-fb eq-btn" onclick="event.stopPropagation();equiparItem('${item.id}','${ek}');renderInv()">⚡ EQUIPAR</button>`}
+                    </div>`;
+                div.onclick = () => abrirItem3D(i);
             }
             g.appendChild(div);
         }
-        // Slot especial: Mapa Estelar
+
+        // Slot mapa estelar
         const mapDiv = document.createElement('div');
-        mapDiv.className = 'inv-slot mapa-slot';
+        mapDiv.className = 'inv-slot-new mapa-slot';
         mapDiv.onclick = () => { toggleInv(); abrirStarmap(); };
         const disc = nave.coordenadas.length;
         mapDiv.innerHTML = `
-            <div class="si">🌌</div>
-            <div class="sn" style="color:rgba(0,255,200,0.85);font-size:5.5px">MAPA ESTELAR</div>
-            <div class="st">${disc > 0 ? disc+' REGISTROS' : 'VACÍO'}</div>
-            <div style="font-size:5px;color:rgba(0,255,200,0.35);margin-top:3px">[M] ABRIR</div>
-        `;
+            <div class="inv-slot-stripe" style="background:linear-gradient(90deg,#00ffcc,#0044ff)"></div>
+            <div class="inv-slot-inner">
+                <div class="inv-slot-icon">🌌</div>
+                <div class="inv-slot-name">MAPA ESTELAR</div>
+                <div class="inv-slot-type">${disc > 0 ? disc+' REGISTROS' : 'VACÍO'}</div>
+                <div style="font-size:5px;color:rgba(0,255,200,0.35);margin-top:2px">[M] ABRIR</div>
+            </div>`;
         g.appendChild(mapDiv);
-        // Aviso munición
-        const sinMu = aI && (nave.municion[aI.id]||0)===0;
-        document.getElementById('inv-ammo-warn').style.display=sinMu?'block':'none';
 
-        // Coordenadas guardadas
-        const cg=document.getElementById('inv-coords-grid');
-        const cl=document.getElementById('inv-coords-label');
-        cg.innerHTML='';
-        if(nave.coordenadas.length){
-            cl.style.display='block';
-            nave.coordenadas.forEach((c,i)=>{
-                const tipoLabel={sol:'☀ ESTRELLA',oceano:'🌊 OCEÁNICO',rocoso:'🪨 ROCOSO',gaseoso:'🌀 GASEOSO',toxico:'☣ TÓXICO',helado:'❄ HELADO',volcanico:'🌋 VOLCÁNICO',terrestre:'🌿 TERRESTRE'}[c.tipo]||c.tipo;
-                const div=document.createElement('div'); div.className='coord-slot';
-                div.innerHTML=`
-                    <button class="coord-del" onclick="borrarCoord(${i})">✕</button>
-                    <div class="coord-nombre">📍 ${c.id}</div>
-                    <div class="coord-tipo">${tipoLabel}</div>
-                    <div class="coord-xy">X: ${c.x} &nbsp;|&nbsp; Y: ${c.y}</div>
-                    <div class="coord-data">🌡 ${c.temp} &nbsp;|&nbsp; ⚠ ${c.peligro}</div>
-                    <div class="coord-data">💎 ${c.recursos}</div>
-                `;
-                cg.appendChild(div);
-            });
-        } else {
-            cl.style.display='none';
+        /* ── Panel BODEGA ── */
+        const rg = document.getElementById('inv-bodega-grid');
+        if(rg) {
+            const bodega = nave.lootBodega;
+            const recursos = Object.keys(bodega).filter(id => bodega[id] > 0);
+            rg.innerHTML = recursos.length > 0
+                ? recursos.map(id => {
+                    const def = LOOT_DEFS[id];
+                    const qty = bodega[id];
+                    const val = (def?.precio||0) * qty;
+                    return `<div class="rec-card" onclick="abrirItem3DBodega('${id}')">
+                        <div class="rec-icon">${def?.icono||'💎'}</div>
+                        <div class="rec-info">
+                            <div class="rec-name">${def?.nombre||id}</div>
+                            <div class="rec-sub">${def?.precio||0} CR/u &nbsp;·&nbsp; ${(def?.src||'').toUpperCase()}</div>
+                        </div>
+                        <div class="rec-right">
+                            <div class="rec-qty">x${qty}</div>
+                            <div class="rec-val">${val} CR</div>
+                            <div class="rec-3d-hint">🔍 VER</div>
+                        </div>
+                    </div>`;
+                }).join('')
+                : '<div class="inv-empty-hint">Bodega vacía — recolectá recursos del espacio</div>';
         }
 
-        // Recursos recolectados en bodega
-        const rl = document.getElementById('inv-recursos-label');
-        const rg = document.getElementById('inv-recursos-grid');
-        if(!rl || !rg) return;
-        const bodega = nave.lootBodega;
-        const recursos = Object.keys(bodega).filter(id => bodega[id] > 0);
-        if(recursos.length > 0) {
-            rl.style.display = 'block';
-            rg.innerHTML = recursos.map(id => {
-                const def = LOOT_DEFS[id];
-                const qty = bodega[id];
-                const val = (def?.precio||0) * qty;
-                return `<div class="rec-row">
-                    <div class="rec-info">
-                        <span class="rec-icono">${def?.icono||'💎'}</span>
-                        <div>
-                            <div class="rec-nombre">${def?.nombre||id}</div>
-                            <div class="rec-precio">${def?.precio||0} CR/u · Total: ${val} CR</div>
-                        </div>
-                    </div>
-                    <div class="rec-qty">x${qty}</div>
-                </div>`;
-            }).join('');
-        } else {
-            rl.style.display = 'none';
-            rg.innerHTML = '';
+        /* ── Panel MAPAS (coordenadas) ── */
+        const cg = document.getElementById('inv-coords-grid');
+        if(cg) {
+            const tipoLabel = {sol:'☀ ESTRELLA',oceano:'🌊 OCEÁNICO',rocoso:'🪨 ROCOSO',gaseoso:'🌀 GASEOSO',toxico:'☣ TÓXICO',helado:'❄ HELADO',volcanico:'🌋 VOLCÁNICO',terrestre:'🌿 TERRESTRE'};
+            cg.innerHTML = nave.coordenadas.length > 0
+                ? nave.coordenadas.map((c,i) => `
+                    <div class="coord-card">
+                        <button class="coord-del-btn" onclick="borrarCoord(${i})">✕</button>
+                        <div class="coord-card-name">📍 ${c.id}</div>
+                        <div class="coord-card-tipo">${tipoLabel[c.tipo]||c.tipo}</div>
+                        <div class="coord-card-xy">X: ${c.x} &nbsp;|&nbsp; Y: ${c.y}</div>
+                        <div class="coord-card-data">🌡 ${c.temp} &nbsp;|&nbsp; ⚠ ${c.peligro}<br>💎 ${c.recursos}</div>
+                    </div>`).join('')
+                : '<div class="inv-empty-hint">Sin coordenadas — explorá planetas y guardá ubicaciones</div>';
         }
     }
 
@@ -4485,7 +4953,23 @@ window.onload = function() {
     function renderMercado() {
         const cont = document.getElementById('mercado-content');
         const loot = nave.lootBodega;
-        const ids = Object.keys(loot).filter(id=>loot[id]>0);
+
+        // Construir mapa unificado: bodega + items de planetas del inventario
+        const todoVendible = {};
+        // 1. Items de bodega (asteroides, cometas, terrestres)
+        Object.keys(loot).forEach(id => { if(loot[id]>0) todoVendible[id] = {qty: loot[id], src:'bodega'}; });
+        // 2. Items de planetas jugables en el inventario
+        nave.inventario.forEach(item => {
+            if(!item._esRecurso) return;
+            if(!LOOT_DEFS[item.id]) return; // solo si tiene precio definido
+            if(todoVendible[item.id]) {
+                todoVendible[item.id].qty += (item.qty||1);
+            } else {
+                todoVendible[item.id] = {qty: item.qty||1, src:'inventario'};
+            }
+        });
+
+        const ids = Object.keys(todoVendible);
 
         // Actualizar notif badge
         const mbtn = document.getElementById('tab-btn-mercado');
@@ -4495,18 +4979,20 @@ window.onload = function() {
         }
 
         if(ids.length === 0) {
-            cont.innerHTML = `<div class="mercado-empty">📭 BODEGA VACÍA<br><br>Destruí asteroides y cometas en el espacio<br>o descubrí planetas terrestres<br>para recolectar recursos vendibles.</div>`;
+            cont.innerHTML = `<div class="mercado-empty">📭 BODEGA VACÍA<br><br>Destruí asteroides y cometas en el espacio,<br>descubrí planetas terrestres<br>o explorá los planetas de la Galaxia Orión<br>para recolectar recursos vendibles.</div>`;
             return;
         }
 
-        const minerales = ids.filter(id=>LOOT_DEFS[id]?.cat==='minerales');
+        const minerales  = ids.filter(id=>LOOT_DEFS[id]?.cat==='minerales');
         const organicos  = ids.filter(id=>LOOT_DEFS[id]?.cat==='organicos');
+        const exoticos   = ids.filter(id=>LOOT_DEFS[id]?.cat==='exoticos'||LOOT_DEFS[id]?.cat==='legendario');
+        const planetario = ids.filter(id=>LOOT_DEFS[id]?.cat==='planetario');
 
         function makeSection(title, color, items) {
             if(!items.length) return '';
             const rows = items.map(id=>{
                 const def = LOOT_DEFS[id];
-                const qty = loot[id];
+                const qty = todoVendible[id].qty;
                 const val = def.precio * qty;
                 return `<div class="loot-item-row">
                     <div class="loot-item-info">
@@ -4525,11 +5011,16 @@ window.onload = function() {
             </div>`;
         }
 
-        const totalCR = lootTotalValor();
+        const totalCR = ids.reduce((sum,id)=>{
+            const def=LOOT_DEFS[id]; if(!def) return sum;
+            return sum + def.precio * todoVendible[id].qty;
+        },0);
+
         cont.innerHTML = `
             <div class="mercado-grid">
-                ${makeSection('// MINERALES ASTEROIDALES','rgba(180,140,90,0.9)', minerales)}
-                ${makeSection('// MATERIALES COMETARIOS','rgba(80,200,255,0.9)', organicos)}
+                ${makeSection('// MINERALES','rgba(180,140,90,0.9)', minerales)}
+                ${makeSection('// ORGÁNICOS &amp; COMETARIOS','rgba(80,200,255,0.9)', organicos)}
+                ${makeSection('// EXÓTICOS &amp; PLANETARIOS','rgba(180,80,255,0.9)', [...exoticos,...planetario])}
             </div>
             <div class="loot-total-box">
                 <div>
@@ -4541,29 +5032,38 @@ window.onload = function() {
     }
 
     window.venderLoot = function(id) {
-        const qty = nave.lootBodega[id]||0;
-        if(!qty) return;
         const def = LOOT_DEFS[id];
+        if(!def) return;
+        // Cantidad en bodega + inventario de planeta
+        let qty = nave.lootBodega[id]||0;
+        const invItem = nave.inventario.find(i => i._esRecurso && i.id === id);
+        if(invItem) qty += (invItem.qty||1);
+        if(!qty) return;
         const ganancia = def.precio * qty;
         nave.credits += ganancia;
+        // Limpiar bodega
         delete nave.lootBodega[id];
-        // Quitar también del inventario
-        const idx = nave.inventario.findIndex(i => i._esRecurso && i.id === id);
-        if(idx !== -1) nave.inventario.splice(idx, 1);
+        // Limpiar inventario
+        nave.inventario = nave.inventario.filter(i => !(i._esRecurso && i.id === id));
         notif(`💰 ${def.nombre} x${qty} vendido — +${ganancia} CR`, 'ok');
         playSound('compra');
+        if(typeof GameState!=='undefined') GameState.save(nave);
         actualizarUI(); syncCr(); renderMercado();
     };
 
     window.venderTodoLoot = function() {
-        const total = lootTotalValor();
+        // Calcular total de bodega + inventario de planetas
+        const todoVendible = {};
+        Object.keys(nave.lootBodega).forEach(id=>{ if(nave.lootBodega[id]>0) todoVendible[id]=(todoVendible[id]||0)+nave.lootBodega[id]; });
+        nave.inventario.forEach(item=>{ if(item._esRecurso && LOOT_DEFS[item.id]) todoVendible[item.id]=(todoVendible[item.id]||0)+(item.qty||1); });
+        const total = Object.keys(todoVendible).reduce((s,id)=>s+(LOOT_DEFS[id]?.precio||0)*todoVendible[id],0);
         if(!total) return;
         nave.credits += total;
         nave.lootBodega = {};
-        // Quitar todos los recursos del inventario
         nave.inventario = nave.inventario.filter(i => !i._esRecurso);
-        notif(`💰 Bodega vaciada — +${total} CR`, 'ok');
+        notif(`💰 Todo vendido — +${total} CR`, 'ok');
         playSound('compra');
+        if(typeof GameState!=='undefined') GameState.save(nave);
         actualizarUI(); syncCr(); renderMercado();
     };
     window.tirarRecurso = function(id) {
@@ -5413,6 +5913,13 @@ window.onload = function() {
         const btn=document.getElementById('btn-guardar-coord');
         btn.disabled=ya; btn.className=ya?'guardado':'';
         btn.textContent=ya?'✓ COORDENADAS GUARDADAS':'📌 GUARDAR COORDENADAS';
+        // Mostrar botón aterrizar si es planeta jugable
+        const btnAt = document.getElementById('btn-aterrizar-hud');
+        if (btnAt) {
+            const esJugable = typeof PLANETAS_JUGABLES !== 'undefined' && PLANETAS_JUGABLES[p.id];
+            btnAt.style.display = esJugable ? 'block' : 'none';
+            btnAt.title = '';
+        }
         document.getElementById('hud-planeta').style.display='block';
         actualizarPosHUDPlaneta(p);
     }
@@ -10435,5 +10942,646 @@ document.addEventListener('keydown', function(e) {
 /* ══ Init ══ */
 coopActualizarHUD();
 </script>
+
+<script>
+/* ══════════════════════════════════════════════
+   SISTEMA DE ATERRIZAJE — Universo Alpha
+   Integración index.html ↔ planetas jugables
+   ══════════════════════════════════════════════ */
+
+// Mapa de planetas jugables → archivo HTML
+const PLANETAS_JUGABLES = {
+    'Aethon I':   'Aethon_I.html',
+    'Veridis II': 'Veridis_2.html',
+    'Pyrcal III': 'pyrcal_III.html',
+    'Kronos IV':  'kronos_iv.html',
+    'Glacium V':  'glacium_v.html',
+    'Toxar VI':   'Toxar_VI.html',
+};
+
+// Radio de proximidad para mostrar el prompt (en unidades del mundo)
+const RADIO_ATERRIZAJE = 800;
+
+// Planeta al que se puede aterrizar actualmente
+let planetaParaAterrizar = null;
+let enPlaneta = false;
+
+/* ── Detectar proximidad a planetas jugables ── */
+function detectarAterrizaje(nave, orbitalState, SISTEMAS_SOLARES) {
+    if (enPlaneta) return;
+
+    // Necesitamos el sol de Sirius Prime para calcular posiciones orbitales
+    // El sol está en el array planetas[] del juego principal
+    const _planetas = window._UA_planetas; // lo expondremos abajo
+    if (!_planetas) return;
+    const sol = _planetas.find(p => p.id === 'SIRIUS PRIME');
+    if (!sol) return;
+
+    const sistema = SISTEMAS_SOLARES['SIRIUS PRIME'];
+    if (!sistema) return;
+    const pStates = orbitalState['SIRIUS PRIME'];
+    if (!pStates) return;
+
+    let masC = null;
+    let distMin = Infinity;
+
+    sistema.planetas.forEach((pd, pi) => {
+        if (!PLANETAS_JUGABLES[pd.id]) return;
+        const st = pStates[pi];
+        if (!st) return;
+        const px = sol.x + Math.cos(st.ang) * pd.orbita;
+        const py = sol.y + Math.sin(st.ang) * pd.orbita;
+        const dx = nave.x - px, dy = nave.y - py;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < RADIO_ATERRIZAJE + pd.r && dist < distMin) {
+            distMin = dist;
+            masC = { id: pd.id, r: pd.r };
+        }
+    });
+
+    const prompt = document.getElementById('prompt-aterrizar');
+    const nombreSpan = document.getElementById('prompt-planeta-nombre');
+    const btnHud = document.getElementById('btn-aterrizar-hud');
+
+    if (masC) {
+        planetaParaAterrizar = masC.id;
+        if (prompt) {
+            prompt.style.display = 'block';
+            if (nombreSpan) nombreSpan.textContent = masC.id.toUpperCase();
+        }
+        if (btnHud) btnHud.style.display = 'block';
+    } else {
+        planetaParaAterrizar = null;
+        if (prompt) prompt.style.display = 'none';
+        if (btnHud) btnHud.style.display = 'none';
+    }
+}
+
+/* ── Iniciar aterrizaje ── */
+function iniciarAterrizaje() {
+    if (!planetaParaAterrizar || enPlaneta) return;
+    const archivo = PLANETAS_JUGABLES[planetaParaAterrizar];
+    if (!archivo) return;
+
+    // Guardar estado de la nave en localStorage
+    const _nave = window._UA_nave;
+    if (_nave && typeof GameState !== 'undefined') {
+        GameState.save(_nave);
+    }
+
+    // Mostrar overlay de transición
+    const overlay = document.getElementById('landing-overlay');
+    const msg = document.getElementById('landing-msg');
+    const bar = document.getElementById('landing-bar');
+    if (overlay) {
+        overlay.classList.add('show');
+        if (msg) msg.textContent = 'ATERRIZANDO EN ' + planetaParaAterrizar.toUpperCase();
+        if (bar) { bar.style.width = '0%'; setTimeout(() => { bar.style.width = '100%'; }, 50); }
+    }
+
+    // Después de la animación, cargar el iframe
+    setTimeout(() => {
+        enPlaneta = true;
+        const wrap = document.getElementById('planet-frame-wrap');
+        const iframe = document.getElementById('planet-iframe');
+        const btnVolver = document.getElementById('btn-volver-espacio');
+        const prompt = document.getElementById('prompt-aterrizar');
+        const btnHud = document.getElementById('btn-aterrizar-hud');
+
+        if (iframe) iframe.src = archivo;
+        if (wrap) wrap.classList.add('show');
+        if (btnVolver) btnVolver.style.display = 'block';
+        if (prompt) prompt.style.display = 'none';
+        if (btnHud) btnHud.style.display = 'none';
+
+        // Ocultar overlay
+        if (overlay) overlay.classList.remove('show');
+    }, 1400);
+}
+
+/* ── Volver al espacio ── */
+function volverAlEspacio() {
+    // Transición de salida
+    const overlay = document.getElementById('landing-overlay');
+    const msg = document.getElementById('landing-msg');
+    if (overlay && msg) {
+        msg.textContent = 'DESPEGANDO...';
+        overlay.classList.add('show');
+    }
+
+    // PASO 1: Pedirle al planeta que guarde su estado (recursos farmeados incluidos)
+    const _iframe = document.getElementById('planet-iframe');
+    try { if (_iframe && _iframe.contentWindow) _iframe.contentWindow.postMessage('planeta:guardar', '*'); } catch(e){}
+
+    // PASO 2: Esperar a que el planeta guarde en localStorage, luego leer el estado actualizado
+    setTimeout(() => {
+        const _nave2 = window._UA_nave;
+        if (typeof GameState !== 'undefined' && _nave2) {
+            const state = GameState.load();
+            if (state) {
+                _nave2.credits    = state.credits    ?? _nave2.credits;
+                _nave2.fuel       = state.fuel       ?? _nave2.fuel;
+                _nave2.hull       = state.hull       ?? _nave2.hull;
+                _nave2.shield     = state.shield     ?? _nave2.shield;
+                _nave2.shieldMax  = state.shieldMax  ?? _nave2.shieldMax;
+                _nave2.inventario = state.inventario ?? _nave2.inventario;
+                _nave2.equipado   = state.equipado   ?? _nave2.equipado;
+                _nave2.municion   = state.municion   ?? _nave2.municion;
+                _nave2.lootBodega = state.lootBodega ?? _nave2.lootBodega;
+                _nave2.coordenadas= state.coordenadas ?? _nave2.coordenadas;
+            }
+        }
+
+        const wrap = document.getElementById('planet-frame-wrap');
+        const iframe = document.getElementById('planet-iframe');
+        const btnVolver = document.getElementById('btn-volver-espacio');
+        if (wrap) wrap.classList.remove('show');
+        if (iframe) iframe.src = '';
+        if (btnVolver) btnVolver.style.display = 'none';
+        enPlaneta = false;
+        planetaParaAterrizar = null;
+
+        if (overlay) overlay.classList.remove('show');
+
+        // Actualizar HUDs del juego
+        setTimeout(() => {
+            if (typeof actualizarHUD === 'function') actualizarHUD();
+            if (typeof renderInventario === 'function') renderInventario();
+        }, 100);
+    }, 900);
+}
+
+/* ── Tecla E para aterrizar ── */
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'e' || e.key === 'E') {
+        if (planetaParaAterrizar && !enPlaneta) {
+            iniciarAterrizaje();
+        }
+    }
+    // ESC para volver al espacio si estamos en un planeta
+    if (e.key === 'Escape' && enPlaneta) {
+        volverAlEspacio();
+    }
+});
+
+/* ── Hook en el game loop para detectar proximidad ──
+   Se engancha después de que el juego cargue */
+(function hookAterrizaje() {
+    const interval = setInterval(() => {
+        if (!window._UA_nave || !window._UA_orbitalState || !window._UA_SISTEMAS_SOLARES) return;
+        clearInterval(interval);
+        setInterval(() => {
+            if (!enPlaneta && window._UA_nave) {
+                detectarAterrizaje(window._UA_nave, window._UA_orbitalState, window._UA_SISTEMAS_SOLARES);
+            }
+        }, 200);
+    }, 500);
+})();
+</script>
+<!-- THREE.JS 3D ITEM VIEWER -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ══════════════════════════════════════════════
+   SISTEMA MODAL 3D DE ITEMS — UNIVERSO ALPHA
+   Muestra modelo 3D único + todos los detalles
+   de cualquier item del inventario al tocarlo.
+══════════════════════════════════════════════ */
+
+(function() {
+
+/* ── Configuración de escena Three.js ── */
+let _scene, _camera, _renderer, _mesh, _animId, _isDragging=false, _prevMouse={x:0,y:0};
+let _autoRot = true;
+
+function initScene() {
+    const canvas = document.getElementById('item3d-canvas');
+    const wrap   = document.getElementById('item3d-canvas-wrap');
+    if(!canvas || !wrap) return;
+
+    _scene  = new THREE.Scene();
+    _camera = new THREE.PerspectiveCamera(45, 280/380, 0.1, 100);
+    _camera.position.set(0, 0, 3.2);
+
+    _renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+    _renderer.setSize(280, 380);
+    _renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    _renderer.setClearColor(0x000000, 0);
+
+    // Luces
+    const ambient = new THREE.AmbientLight(0x112244, 1.2);
+    _scene.add(ambient);
+
+    const key = new THREE.DirectionalLight(0x00eeff, 2.5);
+    key.position.set(2, 3, 4);
+    _scene.add(key);
+
+    const fill = new THREE.DirectionalLight(0x8800ff, 0.8);
+    fill.position.set(-3, -1, -2);
+    _scene.add(fill);
+
+    const rim = new THREE.PointLight(0x00ffaa, 1.2, 12);
+    rim.position.set(0, -2, -3);
+    _scene.add(rim);
+
+    // Drag para rotar
+    canvas.addEventListener('mousedown', e => { _isDragging=true; _autoRot=false; _prevMouse={x:e.clientX,y:e.clientY}; });
+    canvas.addEventListener('touchstart', e => { _isDragging=true; _autoRot=false; const t=e.touches[0]; _prevMouse={x:t.clientX,y:t.clientY}; }, {passive:true});
+    window.addEventListener('mouseup',  () => _isDragging=false);
+    window.addEventListener('touchend', () => _isDragging=false);
+    window.addEventListener('mousemove', e => {
+        if(!_isDragging || !_mesh) return;
+        const dx=(e.clientX-_prevMouse.x)*0.012, dy=(e.clientY-_prevMouse.y)*0.012;
+        _mesh.rotation.y += dx; _mesh.rotation.x += dy;
+        _prevMouse={x:e.clientX,y:e.clientY};
+    });
+    window.addEventListener('touchmove', e => {
+        if(!_isDragging || !_mesh) return;
+        const t=e.touches[0];
+        const dx=(t.clientX-_prevMouse.x)*0.012, dy=(t.clientY-_prevMouse.y)*0.012;
+        _mesh.rotation.y += dx; _mesh.rotation.x += dy;
+        _prevMouse={x:t.clientX,y:t.clientY};
+    }, {passive:true});
+}
+
+function clearScene() {
+    if(_mesh){ _scene.remove(_mesh); _mesh.traverse(c=>{ if(c.geometry) c.geometry.dispose(); if(c.material){ if(Array.isArray(c.material)) c.material.forEach(m=>m.dispose()); else c.material.dispose(); } }); _mesh=null; }
+    cancelAnimationFrame(_animId);
+}
+
+function animLoop() {
+    _animId = requestAnimationFrame(animLoop);
+    const t = Date.now() * 0.001;
+    if(_mesh) {
+        if(_autoRot) {
+            _mesh.rotation.y += 0.008;
+            _mesh.rotation.x = Math.sin(t * 0.5) * 0.15;
+        }
+        // Flotación suave siempre activa
+        _mesh.position.y = Math.sin(t * 0.9) * 0.06;
+    }
+    _renderer.render(_scene, _camera);
+}
+
+/* ── Generadores de geometría 3D por tipo de item ── */
+const MAT_CACHE = {};
+
+function makeMat(color, emissive=0x000000, metalness=0.7, roughness=0.25, wireframe=false) {
+    return new THREE.MeshStandardMaterial({ color, emissive, emissiveIntensity:0.4, metalness, roughness, wireframe });
+}
+
+function buildMesh(itemId, itemData) {
+    const g = new THREE.Group();
+
+    // Determinar forma y colores según el item
+    const cfg = getItemVisual(itemId, itemData);
+
+    // Geometría principal
+    const geo = cfg.geo();
+    const mat = new THREE.MeshStandardMaterial({
+        color:      cfg.color,
+        emissive:   cfg.emissive || 0x000000,
+        emissiveIntensity: cfg.emissiveInt || 0.3,
+        metalness:  cfg.metalness != null ? cfg.metalness : 0.6,
+        roughness:  cfg.roughness  != null ? cfg.roughness  : 0.3,
+        transparent: cfg.transparent || false,
+        opacity:     cfg.opacity || 1.0,
+    });
+    const main = new THREE.Mesh(geo, mat);
+    g.add(main);
+
+    // Detalles adicionales según tipo
+    if(cfg.ring) {
+        const ringGeo = new THREE.TorusGeometry(cfg.ring.r, cfg.ring.t, 8, 64);
+        const ringMat = new THREE.MeshStandardMaterial({ color:cfg.ring.color, emissive:cfg.ring.color, emissiveIntensity:0.6, metalness:0.9, roughness:0.1 });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.rotation.x = Math.PI/2;
+        g.add(ring);
+    }
+    if(cfg.core) {
+        const cGeo = new THREE.SphereGeometry(cfg.core.r, 12, 12);
+        const cMat = new THREE.MeshStandardMaterial({ color:cfg.core.color, emissive:cfg.core.color, emissiveIntensity:1.0, transparent:true, opacity:0.85 });
+        g.add(new THREE.Mesh(cGeo, cMat));
+    }
+    if(cfg.wireframe) {
+        const wGeo = cfg.geo();
+        const wMat = new THREE.MeshBasicMaterial({ color:cfg.wireframe, wireframe:true, transparent:true, opacity:0.12 });
+        const wMesh = new THREE.Mesh(wGeo, wMat);
+        wMesh.scale.setScalar(1.04);
+        g.add(wMesh);
+    }
+    if(cfg.particles) {
+        const pts = buildParticles(cfg.particles);
+        g.add(pts);
+    }
+
+    return g;
+}
+
+function buildParticles(cfg) {
+    const count = cfg.count || 40;
+    const pos = new Float32Array(count*3);
+    for(let i=0;i<count;i++){
+        const r = cfg.radius || 1.2;
+        pos[i*3]   = (Math.random()-0.5)*r*2;
+        pos[i*3+1] = (Math.random()-0.5)*r*2;
+        pos[i*3+2] = (Math.random()-0.5)*r*2;
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+    const mat = new THREE.PointsMaterial({ color:cfg.color||0x00ffff, size:cfg.size||0.04, transparent:true, opacity:0.7 });
+    return new THREE.Points(geo, mat);
+}
+
+/* ── Mapa visual por item ── */
+function getItemVisual(id, data) {
+    // ── Normalizar ID ──
+    id = (id||'').toLowerCase().replace(/-/g,'_');
+
+    // ── Tabla de alias: IDs alternativos → ID canónico ──
+    const ALIAS = {
+        escudo_reflex:'reflex', escudo_titan:'titan', escudo_mk1:'escudo_mk1',
+        laser_mk2:'laser_mk1', laser_mk3:'laser_mk1', laser_mk4:'laser_mk1',
+        polvo_estelar:'polvo_cosmico', polvo_nebular:'polvo_cosmico',
+        agua_helada:'hielo_cometa', cristal_hielo:'hielo_cometa',
+        metano:'gas_ionizado', gas_nebular:'gas_ionizado',
+        lava:'lava_sol', roca_lava:'lava_sol', magma:'lava_sol',
+        mineral_rojo:'hierro_bruto', mineral_pesado:'hierro_bruto',
+        fibra:'madera_estelar', madera:'madera_estelar',
+        semilla:'flores_energeticas', flora:'flores_energeticas',
+        agua:'h2o', agua_purificada:'h2o',
+        cristal_verde:'cristal', cristal_rojo:'cristal',
+        nodo:'nodo_iridium', iridium_puro:'nodo_iridium',
+        nebular_core:'nucleo_nebular', nebula:'nucleo_nebular',
+        tanque_xxl:'tanque_xl', tanque_grande:'tanque_xl',
+        motor_std:'motor_estandar', motor_basico:'motor_estandar',
+        sonda_cometa:'sonda_planetaria', sonda_general:'sonda_planetaria',
+    };
+    if(ALIAS[id]) id = ALIAS[id];
+
+    // Armas
+    if(id==='laser_mk1')  return { geo:()=>new THREE.CylinderGeometry(0.06,0.12,1.6,8), color:0x00ccff, emissive:0x003366, metalness:0.9, roughness:0.1, ring:{r:0.35,t:0.04,color:0x00ffff}, wireframe:0x00ffff };
+    if(id==='railgun')    return { geo:()=>new THREE.CylinderGeometry(0.05,0.05,2.0,6), color:0xddcc00, emissive:0x443300, metalness:1.0, roughness:0.05, ring:{r:0.25,t:0.05,color:0xffee00}, particles:{color:0xffee00,count:30,radius:0.8} };
+    if(id==='plasma')     return { geo:()=>new THREE.SphereGeometry(0.55,16,16), color:0xcc00ff, emissive:0x440066, emissiveInt:0.6, metalness:0.3, roughness:0.4, core:{r:0.25,color:0xff44ff}, particles:{color:0xff44ff,count:50,radius:1.1} };
+    if(id==='shotgun')    return { geo:()=>new THREE.CylinderGeometry(0.18,0.22,1.2,6), color:0xff6600, emissive:0x331100, metalness:0.8, roughness:0.2, ring:{r:0.3,t:0.06,color:0xff8800} };
+    if(id==='sniper')     return { geo:()=>new THREE.CylinderGeometry(0.04,0.04,2.4,8), color:0x88ff88, emissive:0x003300, metalness:0.95, roughness:0.05, ring:{r:0.2,t:0.03,color:0x00ff88}, wireframe:0x00ff44 };
+    if(id==='missile')   return { geo:()=>new THREE.ConeGeometry(0.2,1.4,8), color:0xff2200, emissive:0x440000, metalness:0.7, roughness:0.3, particles:{color:0xff4400,count:60,radius:0.9} };
+    // Escudos
+    if(id==='escudo_mk1') return { geo:()=>new THREE.TorusGeometry(0.7,0.12,8,32), color:0x0088ff, emissive:0x001133, emissiveInt:0.5, metalness:0.8, roughness:0.2, core:{r:0.18,color:0x0088ff}, wireframe:0x0088ff };
+    if(id==='reflex')     return { geo:()=>new THREE.OctahedronGeometry(0.75), color:0x00ccff, emissive:0x002244, emissiveInt:0.5, metalness:0.6, roughness:0.15, ring:{r:0.9,t:0.04,color:0x00ccff}, transparent:true, opacity:0.85 };
+    if(id==='titan')      return { geo:()=>new THREE.DodecahedronGeometry(0.75), color:0x0044aa, emissive:0x001144, emissiveInt:0.4, metalness:0.9, roughness:0.1, core:{r:0.3,color:0x00aaff}, wireframe:0x00aaff, particles:{color:0x00aaff,count:40,radius:1.1} };
+    // Motores
+    if(id==='motor_ion')  return { geo:()=>new THREE.CylinderGeometry(0.35,0.5,0.9,12), color:0x44ff88, emissive:0x003322, metalness:0.8, roughness:0.2, ring:{r:0.6,t:0.07,color:0x00ff88}, core:{r:0.2,color:0x00ff88} };
+    if(id==='warp_drive') return { geo:()=>new THREE.TorusKnotGeometry(0.45,0.12,80,12), color:0xffee00, emissive:0x443300, emissiveInt:0.6, metalness:0.7, roughness:0.2, particles:{color:0xffee00,count:60,radius:1.2} };
+    if(id==='antigrav')   return { geo:()=>new THREE.IcosahedronGeometry(0.65), color:0x9955ff, emissive:0x220033, emissiveInt:0.5, metalness:0.5, roughness:0.25, ring:{r:0.85,t:0.05,color:0xbb55ff}, wireframe:0xaa44ff };
+    // Tanques
+    if(id==='tanque_s')   return { geo:()=>new THREE.CylinderGeometry(0.22,0.22,0.9,10), color:0xff8800, emissive:0x331100, metalness:0.7, roughness:0.3 };
+    if(id==='tanque_m')   return { geo:()=>new THREE.CylinderGeometry(0.32,0.32,1.1,10), color:0xff6600, emissive:0x331100, metalness:0.7, roughness:0.25 };
+    if(id==='tanque_xl')  return { geo:()=>new THREE.CylinderGeometry(0.42,0.42,1.4,10), color:0xff4400, emissive:0x220000, metalness:0.8, roughness:0.2, ring:{r:0.52,t:0.05,color:0xff8800} };
+    // Minerales
+    if(id==='hierro_bruto')  return { geo:()=>new THREE.DodecahedronGeometry(0.7), color:0x996655, emissive:0x110000, metalness:0.4, roughness:0.7 };
+    if(id==='titanio_raw')   return { geo:()=>new THREE.OctahedronGeometry(0.75), color:0xaabbcc, emissive:0x111122, metalness:0.9, roughness:0.15, wireframe:0x88aacc };
+    if(id==='cristal_cuarzo')return { geo:()=>new THREE.ConeGeometry(0.35,1.2,6), color:0x88ddff, emissive:0x0022aa, emissiveInt:0.5, metalness:0.1, roughness:0.05, transparent:true, opacity:0.8, core:{r:0.18,color:0x44aaff}, particles:{color:0x44aaff,count:30,radius:0.9} };
+    if(id==='polvo_cosmico') return { geo:()=>new THREE.SphereGeometry(0.5,8,8), color:0xddddff, emissive:0x222244, emissiveInt:0.3, metalness:0.2, roughness:0.9, particles:{color:0xaaaaff,count:80,radius:1.2} };
+    if(id==='roca_fosforica')return { geo:()=>new THREE.IcosahedronGeometry(0.7,0), color:0x44aa66, emissive:0x003311, emissiveInt:0.4, metalness:0.3, roughness:0.6, core:{r:0.15,color:0x00ff44} };
+    if(id==='aleacion_oscura')return{ geo:()=>new THREE.DodecahedronGeometry(0.7), color:0x223344, emissive:0x000011, emissiveInt:0.2, metalness:1.0, roughness:0.05, wireframe:0x004488, particles:{color:0x0044aa,count:40,radius:1.0} };
+    // Cometas
+    if(id==='hielo_cometa')  return { geo:()=>new THREE.IcosahedronGeometry(0.7,1), color:0xaaddff, emissive:0x0033aa, emissiveInt:0.4, metalness:0.1, roughness:0.1, transparent:true, opacity:0.85, particles:{color:0xaaeeff,count:60,radius:1.1} };
+    if(id==='gas_ionizado')  return { geo:()=>new THREE.SphereGeometry(0.65,16,16), color:0x8855ff, emissive:0x220066, emissiveInt:0.7, metalness:0.0, roughness:1.0, transparent:true, opacity:0.7, particles:{color:0xaa66ff,count:70,radius:1.2} };
+    if(id==='particula_azul')return { geo:()=>new THREE.SphereGeometry(0.55,16,16), color:0x0055ff, emissive:0x001188, emissiveInt:0.8, metalness:0.2, roughness:0.3, core:{r:0.25,color:0x0099ff}, ring:{r:0.75,t:0.04,color:0x0077ff} };
+    if(id==='cola_cometa')   return { geo:()=>new THREE.ConeGeometry(0.18,1.5,8), color:0xffffff, emissive:0x3333aa, emissiveInt:0.5, metalness:0.0, roughness:0.5, transparent:true, opacity:0.8, particles:{color:0xaaaaff,count:50,radius:1.0} };
+    if(id==='nucleo_helado') return { geo:()=>new THREE.IcosahedronGeometry(0.72,1), color:0x00ccff, emissive:0x0044aa, emissiveInt:0.6, metalness:0.3, roughness:0.1, core:{r:0.3,color:0x00eeff}, wireframe:0x00ccff, particles:{color:0x00eeff,count:50,radius:1.1} };
+    // Recursos terrestres
+    if(id==='flores_energeticas'||id==='flower') return { geo:()=>new THREE.SphereGeometry(0.55,10,10), color:0xff88aa, emissive:0x440011, emissiveInt:0.5, metalness:0.1, roughness:0.6, ring:{r:0.75,t:0.05,color:0xff66aa}, particles:{color:0xff99bb,count:50,radius:1.0} };
+    if(id==='madera_estelar'||id==='arbol_mini') return { geo:()=>new THREE.CylinderGeometry(0.18,0.38,1.3,7), color:0x886644, emissive:0x221100, metalness:0.2, roughness:0.8 };
+    if(id==='xenita')        return { geo:()=>new THREE.OctahedronGeometry(0.65), color:0xff8833, emissive:0x441100, emissiveInt:0.4, metalness:0.5, roughness:0.3, wireframe:0xff8833 };
+    if(id==='nodo_iridium'||id==='iridium') return { geo:()=>new THREE.TorusGeometry(0.45,0.2,10,32), color:0xcc66ff, emissive:0x330044, emissiveInt:0.5, metalness:0.8, roughness:0.2, core:{r:0.2,color:0xdd88ff}, wireframe:0xcc66ff };
+    if(id==='fragmento_pulsar') return { geo:()=>new THREE.IcosahedronGeometry(0.7,1), color:0x4466ff, emissive:0x001166, emissiveInt:0.7, metalness:0.4, roughness:0.2, ring:{r:0.85,t:0.04,color:0x4466ff}, particles:{color:0x4488ff,count:50,radius:1.0} };
+    if(id==='nucleo_nebular'||id==='nebular') return { geo:()=>new THREE.DodecahedronGeometry(0.72), color:0xffffff, emissive:0x555588, emissiveInt:0.5, metalness:0.6, roughness:0.2, core:{r:0.3,color:0xffffff}, wireframe:0xaaaaff, particles:{color:0xddddff,count:60,radius:1.1} };
+    if(id==='cristal')       return { geo:()=>new THREE.ConeGeometry(0.3,1.4,6), color:0x00ffdd, emissive:0x003333, emissiveInt:0.6, metalness:0.1, roughness:0.05, transparent:true, opacity:0.8, core:{r:0.2,color:0x00ffdd} };
+    if(id==='nucleo')        return { geo:()=>new THREE.SphereGeometry(0.65,16,16), color:0x9900ff, emissive:0x330066, emissiveInt:0.6, metalness:0.4, roughness:0.3, ring:{r:0.85,t:0.06,color:0xbb00ff}, core:{r:0.28,color:0xcc44ff} };
+    if(id==='catalizador')   return { geo:()=>new THREE.TorusKnotGeometry(0.42,0.1,80,12), color:0xffaa00, emissive:0x442200, emissiveInt:0.5, metalness:0.6, roughness:0.3, particles:{color:0xffcc00,count:70,radius:1.1} };
+    if(id==='biomasa')       return { geo:()=>new THREE.SphereGeometry(0.65,10,10), color:0x44ff44, emissive:0x004400, emissiveInt:0.4, metalness:0.1, roughness:0.8, particles:{color:0x66ff66,count:40,radius:1.0} };
+    if(id==='h2o')           return { geo:()=>new THREE.SphereGeometry(0.6,16,16), color:0x0088ff, emissive:0x001133, emissiveInt:0.4, metalness:0.0, roughness:0.05, transparent:true, opacity:0.75, particles:{color:0x44aaff,count:30,radius:1.0} };
+    if(id==='antena_grav')   return { geo:()=>new THREE.CylinderGeometry(0.04,0.04,1.6,8), color:0x888888, emissive:0x002222, metalness:0.9, roughness:0.1, ring:{r:0.45,t:0.06,color:0x00ffcc}, particles:{color:0x00ffcc,count:30,radius:0.8} };
+    // Sondas
+    if(id==='sonda_planetaria') return { geo:()=>new THREE.SphereGeometry(0.55,12,12), color:0x8855ff, emissive:0x220044, emissiveInt:0.4, metalness:0.7, roughness:0.3, ring:{r:0.75,t:0.04,color:0xaa66ff}, particles:{color:0xaa66ff,count:30,radius:1.0} };
+    if(id==='sonda_mineral')    return { geo:()=>new THREE.OctahedronGeometry(0.65), color:0xcc9966, emissive:0x221100, emissiveInt:0.3, metalness:0.8, roughness:0.3, wireframe:0xddaa77 };
+
+    // ── Nuevas entradas: motor estándar ──
+    if(id==='motor_estandar') return { geo:()=>new THREE.CylinderGeometry(0.3,0.45,0.85,10), color:0x888888, emissive:0x111111, emissiveInt:0.2, metalness:0.8, roughness:0.3, ring:{r:0.55,t:0.06,color:0xaaaaaa} };
+    // ── Recursos planetarios ──
+    if(id==='resina')      return { geo:()=>new THREE.SphereGeometry(0.52,10,10), color:0x88cc44, emissive:0x224400, emissiveInt:0.4, metalness:0.1, roughness:0.9, particles:{color:0xaaff44,count:30,radius:0.9} };
+    if(id==='lava_sol'||id==='cristal_plasma') return { geo:()=>new THREE.IcosahedronGeometry(0.7,0), color:0xff3300, emissive:0x550000, emissiveInt:0.7, metalness:0.3, roughness:0.5, particles:{color:0xff6600,count:50,radius:1.0} };
+    if(id==='roca_volcanica'||id==='obsidiana') return { geo:()=>new THREE.DodecahedronGeometry(0.7), color:0x330000, emissive:0x220000, emissiveInt:0.3, metalness:0.6, roughness:0.6, wireframe:0x882200 };
+    if(id==='espora'||id==='hongo_estelar') return { geo:()=>new THREE.SphereGeometry(0.55,8,8), color:0xaaff88, emissive:0x224400, emissiveInt:0.4, metalness:0.0, roughness:0.9, particles:{color:0xccff66,count:35,radius:0.9} };
+    if(id==='mineral_azul'||id==='cristal_azul') return { geo:()=>new THREE.OctahedronGeometry(0.65), color:0x4488ff, emissive:0x001144, emissiveInt:0.5, metalness:0.3, roughness:0.1, transparent:true, opacity:0.85, core:{r:0.2,color:0x88aaff} };
+    if(id==='sal_estelar'||id==='sal') return { geo:()=>new THREE.BoxGeometry(0.9,0.9,0.9), color:0xeeeeff, emissive:0x111122, emissiveInt:0.2, metalness:0.5, roughness:0.2 };
+    if(id==='gas_toxico'||id==='vapor') return { geo:()=>new THREE.SphereGeometry(0.65,12,12), color:0x88ff00, emissive:0x223300, emissiveInt:0.5, metalness:0.0, roughness:1.0, transparent:true, opacity:0.65, particles:{color:0xaaff44,count:60,radius:1.2} };
+    if(id==='metal_glaciar'||id==='titanio_helado') return { geo:()=>new THREE.OctahedronGeometry(0.7), color:0xaaccff, emissive:0x112244, emissiveInt:0.4, metalness:0.95, roughness:0.08, wireframe:0x88aaff };
+    if(id==='gema_oceanica'||id==='coral_estelar') return { geo:()=>new THREE.IcosahedronGeometry(0.62,1), color:0x00ddcc, emissive:0x003333, emissiveInt:0.5, metalness:0.2, roughness:0.3, transparent:true, opacity:0.9, particles:{color:0x00ffee,count:40,radius:1.0} };
+    // ── Default mejorado: icosaedro con color hash ──
+    const hue = id.split('').reduce((a,c)=>a+c.charCodeAt(0),0) % 360;
+    const col = new THREE.Color().setHSL(hue/360, 0.65, 0.5);
+    return { geo:()=>new THREE.IcosahedronGeometry(0.68,0), color:col.getHex(), emissive:col.getHex(), emissiveInt:0.25, metalness:0.5, roughness:0.4, wireframe:col.getHex() };
+}
+
+/* ── Datos de rareza y tipo ── */
+function getRareza(item) {
+    const precio = item.precio || (window._UA_LOOT_DEFS && window._UA_LOOT_DEFS[item.id]?.precio) || 0;
+    if(precio >= 1000 || item.id==='nucleo_nebular'||item.id==='nebular'||item.id==='sniper'||item.id==='missile'||item.id==='antigrav')
+        return { label:'LEGENDARIO', color:'#ff8800', bg:'rgba(255,136,0,0.12)', border:'rgba(255,136,0,0.4)', bar:'linear-gradient(90deg,#ff4400,#ff8800,#ffcc00)', pct:100 };
+    if(precio >= 400 || item.id==='aleacion_oscura'||item.id==='nucleo_helado'||item.id==='warp_drive'||item.id==='titan'||item.id==='catalizador')
+        return { label:'ÉPICO',      color:'#cc80ff', bg:'rgba(180,80,255,0.1)',  border:'rgba(180,80,255,0.35)', bar:'linear-gradient(90deg,#6600cc,#cc80ff)', pct:80 };
+    if(precio >= 80 || item.id==='cristal_cuarzo'||item.id==='reflex'||item.id==='plasma'||item.id==='railgun')
+        return { label:'RARO',       color:'#00aaff', bg:'rgba(0,170,255,0.1)',   border:'rgba(0,170,255,0.3)',  bar:'linear-gradient(90deg,#0044cc,#00aaff)', pct:55 };
+    if(precio >= 25)
+        return { label:'INFRECUENTE',color:'#00dd88', bg:'rgba(0,220,136,0.08)', border:'rgba(0,220,136,0.25)', bar:'linear-gradient(90deg,#006633,#00dd88)', pct:35 };
+    return     { label:'COMÚN',     color:'#888888', bg:'rgba(140,140,140,0.08)',border:'rgba(140,140,140,0.2)', bar:'linear-gradient(90deg,#444,#888)', pct:18 };
+}
+
+function getTipoBadge(item) {
+    if(item._esRecurso) {
+        const cat = item.cat || '—';
+        const map = { minerales:{label:'MINERAL', color:'#cc9966', bg:'rgba(180,140,80,0.15)', border:'rgba(180,140,80,0.35)'},
+                      organicos:{label:'ORGÁNICO',color:'#66ddaa', bg:'rgba(80,200,140,0.12)', border:'rgba(80,200,140,0.3)'},
+                      exoticos: {label:'EXÓTICO', color:'#cc80ff', bg:'rgba(180,80,255,0.12)', border:'rgba(180,80,255,0.3)'},
+                      legendario:{label:'LEGENDARIO',color:'#ff8800',bg:'rgba(255,136,0,0.12)',border:'rgba(255,136,0,0.35)'},
+                      planetario:{label:'PLANETARIO',color:'#00ddff',bg:'rgba(0,200,255,0.1)', border:'rgba(0,200,255,0.3)'} };
+        return map[cat] || { label:cat.toUpperCase(), color:'#aaaaaa', bg:'rgba(150,150,150,0.1)', border:'rgba(150,150,150,0.25)' };
+    }
+    if(item._esTanque)  return { label:'COMBUSTIBLE', color:'#ff8800', bg:'rgba(255,136,0,0.1)', border:'rgba(255,136,0,0.3)' };
+    if(item._esSonda)   return { label:'SONDA', color:'#aa66ff', bg:'rgba(160,80,255,0.1)', border:'rgba(160,80,255,0.3)' };
+    const ek = getEqKey?.(item.id);
+    if(ek==='arma')   return { label:'ARMAMENTO', color:'#ff4444', bg:'rgba(255,60,60,0.1)', border:'rgba(255,60,60,0.3)' };
+    if(ek==='escudo') return { label:'ESCUDO',    color:'#00aaff', bg:'rgba(0,170,255,0.1)', border:'rgba(0,170,255,0.3)' };
+    if(ek==='motor')  return { label:'MOTOR',     color:'#00ff88', bg:'rgba(0,255,136,0.1)', border:'rgba(0,255,136,0.3)' };
+    return { label:'EQUIPAMIENTO', color:'#aaaaaa', bg:'rgba(150,150,150,0.1)', border:'rgba(150,150,150,0.25)' };
+}
+
+/* ── Construir stats HTML ── */
+function buildStats(item, nave) {
+    const stats = [];
+    const lootDefs = window._UA_LOOT_DEFS || {};
+    const precio = item.precio || lootDefs[item.id]?.precio || 0;
+    if(precio) stats.push({ label:'VALOR', val: precio+' CR', cls:'gold' });
+
+    // Armas
+    if(item.munMax)   stats.push({ label:'MUNICIÓN', val:`${nave?.municion?.[item.id]||0} / ${item.munMax}`, cls:'cyan' });
+    if(item.vel)      stats.push({ label:'VELOCIDAD', val: item.vel, cls:'cyan' });
+    if(item.dmg)      stats.push({ label:'DAÑO BASE', val: item.dmg, cls:'red' });
+    if(item.cad)      stats.push({ label:'CADENCIA', val: Math.round(60/(item.cad/60)*10)/10+'/s', cls:'cyan' });
+    if(item.sz)       stats.push({ label:'TAMAÑO PROYECTIL', val: item.sz, cls:'cyan' });
+
+    // Escudos
+    if(item.bonus?.shieldMax) {
+        stats.push({ label:'HP ESCUDO', val: item.bonus.shieldMax, cls:'cyan' });
+        stats.push({ label:'RECARGA SOLAR', val: (item.bonus.recharge*100).toFixed(0)+'%/s', cls:'green' });
+        if(nave && nave.equipado?.escudo===item.id)
+            stats.push({ label:'HP ACTUAL', val: `${Math.round(nave.shield)} / ${nave.shieldMax}`, cls: nave.shield/nave.shieldMax>0.5?'cyan':'red' });
+    }
+    // Motores
+    if(item.bonus?.emp)   stats.push({ label:'EMPUJE', val: '+'+Math.round((item.bonus.emp/0.28-1)*100)+'%', cls:'green' });
+    if(item.bonus?.frict) stats.push({ label:'INERCIA', val: (item.bonus.frict*100).toFixed(1)+'%', cls:'cyan' });
+    if(item.bonus?.rot)   stats.push({ label:'ROTACIÓN', val: '+'+Math.round(item.bonus.rot/0.05*100-100)+'%', cls:'green' });
+    // Tanques
+    if(item.fuelAmount) stats.push({ label:'COMBUSTIBLE', val: '+'+item.fuelAmount+'%', cls:'gold' });
+    // Recursos (inventario)
+    if(item.qty) stats.push({ label:'CANTIDAD', val: 'x'+item.qty, cls:'gold' });
+    if(item.qty && precio) stats.push({ label:'VALOR TOTAL', val: (precio*item.qty)+' CR', cls:'gold' });
+    if(item.cat) stats.push({ label:'CATEGORÍA', val: (item.cat).toUpperCase(), cls:'cyan' });
+    if(item.src) {
+        const srcMap = {ast:'Asteroide',com:'Cometa',ter:'Terrestre',planeta:'Planeta'};
+        stats.push({ label:'ORIGEN', val: srcMap[item.src]||item.src, cls:'cyan' });
+    }
+    // Sondas
+    if(item._esSonda) {
+        const estado = item._sondaEstado || 'lista';
+        const estadoMap = {lista:'EN BASE',volando:'EN VUELO',regresando:'REGRESANDO'};
+        stats.push({ label:'ESTADO', val: estadoMap[estado]||estado, cls: estado==='lista'?'green':estado==='volando'?'cyan':'gold' });
+        const hallCount = item._hallazgos?.length||0;
+        stats.push({ label:'HALLAZGOS', val: hallCount, cls: hallCount>0?'gold':'cyan' });
+        if(item.tipo) stats.push({ label:'TIPO', val: item.tipo.toUpperCase(), cls:'purple' });
+    }
+
+    return stats;
+}
+
+/* ── Helper para abrir recursos de lootBodega en 3D ── */
+window.abrirItem3DBodega = function(id) {
+    const lootDefs = window._UA_LOOT_DEFS || {};
+    const def = lootDefs[id];
+    if(!def) return;
+    const nave = window._UA_nave;
+    const qty = nave?.lootBodega?.[id] || 0;
+    const fakeItem = { ...def, id, _esRecurso:true, qty };
+    window.abrirItem3D(fakeItem);
+};
+
+/* ── API pública ── */
+window.abrirItem3D = function(itemOrIdx) {
+    let item = typeof itemOrIdx === 'number' ? window._UA_nave?.inventario?.[itemOrIdx] : itemOrIdx;
+    if(!item) return;
+    const nave = window._UA_nave;
+
+    if(!_scene) initScene();
+
+    // Llenar datos UI
+    const rar   = getRareza(item);
+    const tipo  = getTipoBadge(item);
+    const stats = buildStats(item, nave);
+
+    document.getElementById('item3d-nombre').textContent = item.nombre || item.id;
+
+    const badge = document.getElementById('item3d-tipo-badge');
+    badge.textContent = tipo.label;
+    badge.style.cssText = `color:${tipo.color};background:${tipo.bg};border:1px solid ${tipo.border};`;
+
+    const rarBar = document.getElementById('item3d-rarity-bar');
+    rarBar.style.cssText = `background:${rar.bar};width:${rar.pct}%;height:2px;border-radius:1px;margin-bottom:4px;`;
+    // Label de rareza como elemento separado
+    let rarLabel = document.getElementById('item3d-rarity-label');
+    if(!rarLabel) {
+        rarLabel = document.createElement('div');
+        rarLabel.id = 'item3d-rarity-label';
+        rarLabel.style.cssText = 'font-family:\'Orbitron\',sans-serif;font-size:6px;letter-spacing:3px;margin-bottom:12px;text-align:right;';
+        rarBar.parentNode.insertBefore(rarLabel, rarBar.nextSibling);
+    }
+    rarLabel.textContent = rar.label;
+    rarLabel.style.color = rar.color;
+
+    const desc = item.desc || (item._esRecurso ? `Recurso ${(item.cat||'').toUpperCase()} recolectado en campo. Vendible en la estación espacial.` : item._esTanque ? 'Tanque portátil de combustible. Úsalo en emergencias fuera de la estación.' : '—');
+    document.getElementById('item3d-desc').textContent = desc;
+
+    // Stats grid
+    const sg = document.getElementById('item3d-stats-grid');
+    sg.innerHTML = stats.map(s=>`
+        <div class="i3d-stat">
+            <div class="i3d-stat-label">${s.label}</div>
+            <div class="i3d-stat-val ${s.cls}">${s.val}</div>
+        </div>`).join('');
+
+    // Extra stats (raw text)
+    const ex = document.getElementById('item3d-extra-stats');
+    if(item.stats) { ex.textContent = item.stats; ex.style.display='block'; }
+    else ex.style.display='none';
+
+    // Botones de acción
+    const ek = typeof getEqKey === 'function' ? getEqKey(item.id) : null;
+    const eq = ek && nave?.equipado?.[ek] === item.id;
+    const ac = document.getElementById('item3d-actions');
+    ac.innerHTML = '';
+    if(item._esTanque) {
+        const idx = nave?.inventario?.indexOf(item);
+        const btn = document.createElement('button');
+        btn.className='i3d-btn warn'; btn.textContent='⛽ USAR TANQUE';
+        btn.onclick=()=>{ if(typeof usarTanque==='function'&&idx!==-1){ usarTanque(idx); cerrarItem3D(); } };
+        ac.appendChild(btn);
+    } else if(item._esRecurso) {
+        const btnT = document.createElement('button');
+        btnT.className='i3d-btn danger'; btnT.textContent='🗑 TIRAR';
+        btnT.onclick=()=>{ if(typeof tirarRecurso==='function'){ tirarRecurso(item.id); renderInv?.(); cerrarItem3D(); } };
+        ac.appendChild(btnT);
+    } else if(ek) {
+        const btn = document.createElement('button');
+        if(eq){ btn.className='i3d-btn warn'; btn.textContent='DESEQUIPAR'; btn.onclick=()=>{ desequiparItem?.(ek); renderInv?.(); cerrarItem3D(); }; }
+        else  { btn.className='i3d-btn green'; btn.textContent='⚡ EQUIPAR'; btn.onclick=()=>{ equiparItem?.(item.id,ek); renderInv?.(); cerrarItem3D(); }; }
+        ac.appendChild(btn);
+    }
+    const btnC = document.createElement('button');
+    btnC.className='i3d-btn primary'; btnC.textContent='✕ CERRAR';
+    btnC.onclick=cerrarItem3D;
+    ac.appendChild(btnC);
+
+    // Modelo 3D
+    clearScene();
+    _autoRot = true;
+    _mesh = buildMesh(item.id, item);
+    _scene.add(_mesh);
+    animLoop();
+
+    // Mostrar overlay
+    const overlay = document.getElementById('item3d-overlay');
+    overlay.classList.add('show');
+};
+
+window.cerrarItem3D = function() {
+    const overlay = document.getElementById('item3d-overlay');
+    overlay.classList.remove('show');
+    clearScene();
+};
+
+// Cerrar con ESC
+document.addEventListener('keydown', e => {
+    if(e.key === 'Escape') {
+        const overlay = document.getElementById('item3d-overlay');
+        if(overlay && overlay.classList.contains('show')) { e.stopPropagation(); cerrarItem3D(); }
+    }
+});
+// Cerrar al hacer clic en el fondo
+document.getElementById('item3d-overlay').addEventListener('click', e => {
+    if(e.target === document.getElementById('item3d-overlay')) cerrarItem3D();
+});
+
+})();
+</script>
 </body>
-</html>
